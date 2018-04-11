@@ -1,0 +1,27 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "testing node tools",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleksandrenko/playground.git"
+  },
+  "author": "Nikolay Aleksandrenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aleksandrenko/playground/issues"
+  },
+  "homepage": "https://github.com/aleksandrenko/playground#readme",
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "koa": "^2.5.0"
+  }
+}
