@@ -7,7 +7,7 @@
     "babel-node": "babel-node --presets=env",
     "start": "nodemon --exec npm run babel-node -- ./index",
     "e2e": "node e2e/",
-    "test": "jasmine spec/appSpec.js"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "jasmine": "^3.1.0",
+    "jasmine-node": "^1.14.5",
     "node-png": "^0.4.3",
     "nodemon": "^1.17.3",
     "puppeteer": "^1.3.0",
