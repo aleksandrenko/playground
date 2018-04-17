@@ -8,6 +8,9 @@ import fetch from 'node-fetch';
 
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools';
 
+import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+
 
 class App extends React.Component {
 
@@ -46,12 +49,11 @@ class App extends React.Component {
             : [];
 
         return (
-            <div>
+            <Fabric>
                 { (this.props.loading || this.state.isLoading) &&
                     <h1>loading</h1>
                 }
 
-                <h1>hello</h1>
                 types: {
                     fields.map(field => {
                         const url = `./fields/${field.name}/`;
@@ -62,9 +64,15 @@ class App extends React.Component {
                     })
                 }
 
+                <DefaultButton
+                    text='I am a FABRIC Button'
+                    primary={ true }
+                    href='#/components/button'
+                />
+
                 {/*<button onClick={() => refetch()}>Refresh</button>*/}
                 {/*<ul>{products && products.map(products => <li key={products.id}>{products.name}</li>)}</ul>*/}
-            </div>
+            </Fabric>
         );
     }
 }
