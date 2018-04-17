@@ -14,7 +14,7 @@ const dummyData = [{
     description: '',
     img: null
 }, {
-    id: 0,
+    id: 1,
     name: 'Soap',
     description: 'A simple soup with nothing special',
     img: null

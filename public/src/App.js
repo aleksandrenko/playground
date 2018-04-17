@@ -3,21 +3,20 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-function App({ data: { books, refetch } }) {
+function App({ data: { products, refetch } }) {
     return (
         <div>
             <button onClick={() => refetch()}>Refresh</button>
-            <ul>{books && books.map(book => <li key={book.id}>{book.title} - {book.author}</li>)}</ul>
+            <ul>{products && products.map(products => <li key={products.id}>{products.name}</li>)}</ul>
         </div>
     );
 }
 
 export default graphql(gql`
   query AppQuery {
-    books {
+    products {
       id
-      title
-      author
+      name
     }
   }
 `)(App);
