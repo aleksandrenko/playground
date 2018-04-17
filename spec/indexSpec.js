@@ -19,26 +19,14 @@ describe('google test', () => {
 
     it(`check if google exists`, async () => {
         // create ScreenshotTester with optional config
-        const tester = await ScreenTest({
-          threshold: 0,
-          includeAA: true,
-          errorSettings: {
-            errorColor: {
-              red: 255,
-              green: 0,
-              blue: 255
-            },
-            errorType: 'flat',
-            transparency: 0.7
-          }
-        });
+        const tester = await ScreenTest();
 
         // setting up puppeteer
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.setViewport({width: 1200, height: 800});
         await page.goto('https://www.google.com', { waitUntil: 'networkidle0' });
-        await page.type('#lst-ib', 'Hello', { delay: 100 });
+        await page.type('#lst-ib', 'Aleksandrenko', { delay: 100 });
 
         // call our tester with browser page returned by puppeteer browser
         // second parameter is optional it's just a test name if provide that's filename

@@ -8,6 +8,7 @@ import koaBody from 'koa-bodyparser';
 import { graphqlKoa, graphiqlKoa } from 'apollo-server-koa';
 import { makeExecutableSchema } from 'graphql-tools';
 import cors from '@koa/cors';
+import serve from 'koa-static-server';
 
 const app = new koa();
 const router = new koaRouter();
@@ -53,6 +54,9 @@ router.get('/graphql', graphqlKoa({ schema: schema }));
 router.get('/graphiql', graphiqlKoa({ endpointURL: '/graphql' }));
 
 app.use(cors());
+app.use(serve({
+    rootDir: './public/build/'
+}));
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(async ctx => {
