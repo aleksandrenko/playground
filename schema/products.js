@@ -8,16 +8,19 @@ export const ProductType = `
     }
 `;
 
-const dummyData = [{
-    id: 0,
-    name: 'Baby Shampoo',
-    description: '',
-    img: null
-}, {
-    id: 1,
-    name: 'Soap',
-    description: 'A simple soup with nothing special',
-    img: null
-}];
+const dummyData = () => {
+    var data = [];
 
-export const ProductResolver = () => dummyData;
+    for(var i = 0; i<100; i++) {
+        data.push({
+            id: i,
+            name: Math.random()*10000,
+            description: Math.random()*10000,
+            img: null
+        });
+    }
+
+    return data;
+};
+
+export const ProductResolver = dummyData;

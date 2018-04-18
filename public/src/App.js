@@ -1,16 +1,18 @@
-
 import React from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
 
+import simplifySchema from './utils/simplifySchema';
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools';
 
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
+import Nav from './Components/Nav';
+import Spinner from './Components/Spinner';
+
+import { initializeIcons } from '@uifabric/icons';
+initializeIcons();
 
 class App extends React.Component {
 
@@ -31,10 +33,6 @@ class App extends React.Component {
                 link,
             });
 
-            console.log(executableSchema); //Graphql server schema
-            console.log(schema); //Graphql server schema
-            console.log(executableSchema._queryType._fields);
-
             this.setState({
                 schema: executableSchema,
                 isLoading: false
@@ -43,45 +41,20 @@ class App extends React.Component {
     }
 
     render() {
-        console.log(this.state);
-        const fields = this.state.schema
-            ? Object.values(this.state.schema._queryType._fields)
+        const schema = this.state.schema
+            ? simplifySchema(this.state.schema)
             : [];
 
         return (
             <Fabric>
                 { (this.props.loading || this.state.isLoading) &&
-                    <h1>loading</h1>
+                    <Spinner label='Loading server graphql schema...' />
                 }
 
-                types: {
-                    fields.map(field => {
-                        const url = `./fields/${field.name}/`;
-                        const name = field.name;
-                        return <div>
-                            <a href={url} key={name}>{ name }</a>
-                        </div>;
-                    })
-                }
-
-                <DefaultButton
-                    text='I am a FABRIC Button'
-                    primary={ true }
-                    href='#/components/button'
-                />
-
-                {/*<button onClick={() => refetch()}>Refresh</button>*/}
-                {/*<ul>{products && products.map(products => <li key={products.id}>{products.name}</li>)}</ul>*/}
+                <Nav nav={schema} />
             </Fabric>
         );
     }
 }
 
-export default graphql(gql`
-  query AppQuery {
-    products {
-      id
-      name
-    }
-  }
-`)(App);
+export default App;
