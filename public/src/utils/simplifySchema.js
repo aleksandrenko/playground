@@ -26,11 +26,9 @@ export default (fields) => {
         .map(queryType => {
             const field = {
                 name: queryType.name,
-                isList: queryType.type.constructor.name === 'GraphQLList'
-                    ? 'List'
-                    : queryType.type.name,
+                isList: queryType.type.constructor.name === 'GraphQLList',
                 type: schema.types.find(_type => {
-                    return _type.name === queryType.type.ofType.name;
+                    return _type.name === (queryType.type.name || queryType.type.ofType.name);
                 })
             };
 

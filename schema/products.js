@@ -23,4 +23,6 @@ const dummyData = () => {
     return data;
 };
 
-export const ProductResolver = dummyData;
+export const ProductResolver = () => dummyData()[1];
+
+export const ProductsResolver = dummyData;

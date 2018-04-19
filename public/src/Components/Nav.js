@@ -6,7 +6,7 @@ import {
 } from 'office-ui-fabric-react/lib/Pivot';
 
 import getListView from './ListView';
-import SingleView from './SingleView';
+import getSingleView from './SingleView';
 
 export default class PivotIcon extends React.Component {
     render() {
@@ -21,7 +21,7 @@ export default class PivotIcon extends React.Component {
                         queryTypes.map(type => {
                             const View = type.isList
                                 ? getListView(type)
-                                : null; //SingleView
+                                : getSingleView(type);
 
                             return (
                             <PivotItem key={type.name} linkText={type.name}>

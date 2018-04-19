@@ -6,6 +6,8 @@ import gql from 'graphql-tag';
 import Grid from './Grid';
 import Spinner from './Spinner';
 
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+
 const _onColumnClick = (ev, column) => {
     console.log('_onColumnClick', ev, column);
     // const { columns, items } = this.state;
@@ -85,7 +87,16 @@ class ListView extends React.Component {
         return (
             <div>
                 <h1>{ type.name }</h1>
-                { error && <div style={{ color: 'red' }}>{ error.message }</div> }
+
+                { error &&
+                    <MessageBar
+                        messageBarType={ MessageBarType.error }
+                        isMultiline={ false }
+                        dismissButtonAriaLabel='Close'
+                    >
+                        { error.message }
+                    </MessageBar>
+                }
 
                 <Grid
                     items={data}
