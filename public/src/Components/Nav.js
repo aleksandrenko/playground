@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 import {
     PivotItem,
     Pivot
@@ -15,7 +14,7 @@ export default class PivotIcon extends React.Component {
         const queryTypes = navs.queryTypes || [];
 
         return (
-            <div>
+            <div className="tabs">
                 <Pivot>
                     {
                         queryTypes.map(type => {
@@ -25,7 +24,6 @@ export default class PivotIcon extends React.Component {
 
                             return (
                             <PivotItem key={type.name} linkText={type.name}>
-                                <Label>{JSON.stringify(type)}</Label>
                                 <View />
                             </PivotItem>
                             );

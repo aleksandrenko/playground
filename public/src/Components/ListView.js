@@ -86,8 +86,6 @@ class ListView extends React.Component {
 
         return (
             <div>
-                <h1>{ type.name }</h1>
-
                 { error &&
                     <MessageBar
                         messageBarType={ MessageBarType.error }

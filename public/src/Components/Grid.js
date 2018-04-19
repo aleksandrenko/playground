@@ -37,10 +37,7 @@ export default class DetailsListComponent extends React.Component {
         return (
             <div>
                 <div>{ selectionDetails }</div>
-                <TextField
-                    label='Filter by name:'
-                    onChanged={ this._onChangeText }
-                />
+
                 <MarqueeSelection selection={ this._selection }>
                     <DetailsList
                         items={ items }
@@ -58,11 +55,6 @@ export default class DetailsListComponent extends React.Component {
             </div>
         );
     }
-
-    _onChangeText = (text) => {
-        const { _items } = this.props;
-        this.setState({ items: text ? _items.filter(i => i.name.toLowerCase().indexOf(text) > -1) : _items });
-    };
 
     _onItemInvoked(item) {
         alert(`Item invoked: ${item.name}`);

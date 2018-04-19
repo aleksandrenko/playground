@@ -3,3 +3,26 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+*[role="tabpanel"] {
+  padding: 1rem;
+  border-top: solid 1px #eee;
+}
+
+.ms-Pivot-text {
+  text-transform: capitalize;
+}
+
+.ms-Pivot-link {
+  font-weight: normal !important;
+  color: #999 !important;
+}
+
+.ms-Pivot-link.is-selected {
+  font-weight: normal !important;
+  color: #0078d4 !important;
+}
+
+.ms-TextField-wrapper .ms-Label {
+  text-transform: capitalize;
+}

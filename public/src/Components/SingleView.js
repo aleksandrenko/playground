@@ -36,6 +36,19 @@ const getTypeQuery = (type) => {
 };
 
 class SingleView extends React.Component {
+    getErrorMessage = (field, value) => {
+
+        if (field.type === 'Int') {
+            if (!Number.isInteger(value)) {
+                return 'Value showed be an Int';
+            }
+        }
+
+        return value.length < 3
+            ? ''
+            : `The length of the input value should less than 3, actual is ${value.length}.`;
+    };
+
     render() {
         const type = this.props.type;
         const { loading, error, refetch } = this.props.data;
@@ -47,13 +60,14 @@ class SingleView extends React.Component {
 
         const uiFields = type.type.fields.map(field => {
             return (
-                <div>
+                <div key={`field_${field.name}`}>
                     <TextField
-                        key={`field_${field.name}`}
                         placeholder="Please fill"
                         label={field.name}
                         description={field.description}
                         value={data[field.name] || ''}
+                        onGetErrorMessage={ (value) => this.getErrorMessage(field, value) }
+                        deferredValidationTime={200}
                     />
                 </div>
             )
