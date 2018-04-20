@@ -1,45 +1,51 @@
 /*
-    Types:
-    Date:
-        @Date
-        @Future
-        @FutureOrPresent
-        @Past
-        @PastOrPresent
+    GraphQL basic types:
 
-    Email
-        @Email
+    Int: A signed 32‐bit integer.
+    Float: A signed double-precision floating-point value.
+    String: A UTF‐8 character sequence.
+    Boolean: true or false.
+    ID: The ID scalar type represents a unique identifier, often used to refetch an object or as the key for a cache.
+        The ID type is serialized in the same way as a String; however, defining it as an ID signifies that it is not
+        intended to be human‐readable.
 
-    Number
-        @Number
-        @Precision(10)
-        @Positive
-        @PositiveOrZero
+    Custom types:
 
-    Int
-        @Positive
-        @PositiveOrZero
+    @Date
+        @Format(mm:dd:yyyy)
+        @Future: The date is valid only if in the future
+        @FutureOrPresent: The date is valid only if in the future or present
+        @Past: The date is valid only if in the past
+        @PastOrPresent: The date is valid only if in the past or present
 
-    Url
-        @Url
+    @Email: A text field with email validation
 
-    File
-        @File
+    @File: Will show a browse UI element
+    @URL: A field validation url string
 
-    @Min(1)
-    @Max(10)
+    Additional validation:
+        @Precision(10): Cam ne use for float types, specifies the digits after the decimal sign
 
+        @Positive: Can be used for int and float
+        @PositiveOrZero: Can be used for int and float
+        @Negative: Can be used for int and float
+        @negativeOrZero: Can be used for int and float
 
+        @Min(1): Can be used for email, url, string, number, float
+        @Max(10): Can be used for email, url, string, number, float
 
-    @Negative
-    @negativeOrZero
+    Custom Behavior:
+        @Default(516): The ui element for this field will use this as initial value
 
-
-    @Default(516)
-
-    @NoUserInput
-    @NoUI
+        @NoUserInput: Will not show the field as readonly in the UI
+        @NoUI: Will not render any ui for the field
 */
+
+const VALIDATORS = {
+    required: (value) => value !== '' && value !== undefined,
+    min: (value, min) => (value.length || value) > min,
+    max: (value, max) => (value.length || value) < max,
+};
 
 
 export default ({field, value}) => {

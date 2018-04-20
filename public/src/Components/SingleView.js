@@ -11,6 +11,8 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 import { Slider } from 'office-ui-fabric-react/lib/Slider';
 
+import getFieldConfig from '../utils/getFieldConfig';
+
 const getTypeQuery = (type) => {
     const query = `
         ${type.name} {
@@ -59,7 +61,11 @@ class SingleView extends React.Component {
         }
 
         const uiFields = type.type.fields.map(field => {
-            return (
+
+            const fieldConfig = getFieldConfig(field);
+            console.log(fieldConfig);
+
+            return (data && !error &&
                 <div key={`field_${field.name}`}>
                     <TextField
                         placeholder="Please fill"
@@ -67,7 +73,7 @@ class SingleView extends React.Component {
                         description={field.description}
                         value={data[field.name] || ''}
                         onGetErrorMessage={ (value) => this.getErrorMessage(field, value) }
-                        deferredValidationTime={200}
+                        deferredValidationTime={400}
                     />
                 </div>
             )

@@ -1,3 +1,19 @@
+const getType = (field) => {
+    let type = field.type.name;
+
+    if (field.type.constructor.name === 'GraphQLList') {
+        type = 'List';
+    }
+
+    if (field.type.constructor.name === 'GraphQLNonNull' && field.type.ofType) {
+        type = field.type.ofType.name;
+    }
+
+    return type;
+};
+
+const getIsRequired = (field) => field.type.constructor.name === 'GraphQLNonNull';
+
 export default (fields) => {
 
     const schema = {
@@ -5,19 +21,21 @@ export default (fields) => {
         types: []
     };
 
+    console.log('raw data', fields);
+
     schema.types = Object.values(fields._typeMap)
         .filter(field => field.astNode !== undefined)
         .filter(field => field.name !== 'Query')
         .map(field => ({
             name: field.name,
             description: field.description,
-            fields: Object.values(field._fields).map(_field => ({
-                name: _field.name,
-                type: _field.type.constructor.name === 'GraphQLList'
-                    ? 'List'
-                    : _field.type.name,
-                description: _field.description
-            }))
+            fields: Object.values(field._fields)
+                .map(_field => ({
+                    name: _field.name,
+                    type: getType(_field),
+                    isRequired: getIsRequired(_field),
+                    description: _field.description
+                }))
         }));
 
     schema.queryTypes = Object.values(fields._queryType._fields)

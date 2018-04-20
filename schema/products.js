@@ -44,10 +44,10 @@
 export const ProductType = `
     type Product {
         # @NoUserInput 
-        id: Int
+        id: Int!
         
         # @Min(3) @Max(20)
-        name: String
+        name: String!
         
         # @Min(3) @Max(20) @Email
         email: String
