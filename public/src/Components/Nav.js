@@ -1,36 +1,33 @@
 import * as React from 'react';
-import {
-    PivotItem,
-    Pivot
-} from 'office-ui-fabric-react/lib/Pivot';
+import { withRouter, NavLink } from 'react-router-dom';
 
-import getListView from './ListView';
-import getSingleView from './SingleView';
 
-export default class PivotIcon extends React.Component {
+class NavComponent extends React.Component {
+
     render() {
-
-        const navs = this.props.nav || [];
-        const queryTypes = navs.queryTypes || [];
+        const schema = this.props.schema || [];
+        const items = schema.queryTypes || [];
 
         return (
-            <div className="tabs">
-                <Pivot>
-                    {
-                        queryTypes.map(type => {
-                            const View = type.isList
-                                ? getListView(type)
-                                : getSingleView(type);
+            <ul className="tabs">
+                {
+                    items.map(item => {
+                        const url = `/${item.name}`;
 
-                            return (
-                            <PivotItem key={type.name} linkText={type.name}>
-                                <View />
-                            </PivotItem>
-                            );
-                        })
-                    };
-                </Pivot>
-            </div>
+                        return (
+                            <NavLink
+                                key={url}
+                                to={url}
+                                activeClassName="activeNav"
+                            >
+                                { item.name }
+                            </NavLink>
+                        )
+                    })
+                }
+            </ul>
         );
     }
 }
+
+export default withRouter(NavComponent);

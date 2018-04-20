@@ -1,7 +1,5 @@
 export default (fields) => {
 
-    console.log(fields);
-
     const schema = {
         queryTypes: [],
         types: []

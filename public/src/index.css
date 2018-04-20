@@ -1,28 +1,56 @@
+@import "reset.css";
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
 
-*[role="tabpanel"] {
-  padding: 1rem;
-  border-top: solid 1px #eee;
+.tabs {
+  border-bottom: solid 1px #eee;
+  padding: 10px;
+  padding-bottom: 0;
 }
 
-.ms-Pivot-text {
+.tabs a {
   text-transform: capitalize;
+  padding: 8px 10px;
+  text-decoration: none;
+  display: inline-block;
+  color: #999;
+  transition: background-color 0.2s;
+  border-bottom: solid 3px transparent;
 }
 
-.ms-Pivot-link {
-  font-weight: normal !important;
-  color: #999 !important;
+.tabs a:hover {
+  background: #fafafa;
 }
 
-.ms-Pivot-link.is-selected {
-  font-weight: normal !important;
-  color: #0078d4 !important;
+.tabs a.activeNav {
+  font-weight: normal;
+  color: #0078d4;
+  border-bottom-color: #0078d4;
 }
 
 .ms-TextField-wrapper .ms-Label {
   text-transform: capitalize;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.page-nav {
+  height: 44px;
+}
+
+.page-content {
+  padding: 10px;
+  flex: 1;
 }
