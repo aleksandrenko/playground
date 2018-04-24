@@ -105,7 +105,10 @@ class App extends React.Component {
                                 return <Route key={url} exact path={url} component={View} />
                             })
                         }
-                        <Route component={NoMatch} />
+                        { !(this.props.loading || this.state.isLoading) &&
+                            <Route component={NoMatch} />
+                        }
+
                     </Switch>
                 </content>
             </Fabric>

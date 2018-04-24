@@ -12,6 +12,7 @@ import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropd
 import { Slider } from 'office-ui-fabric-react/lib/Slider';
 
 import getFieldConfig from '../utils/getFieldConfig';
+import antValidation from 'antvalidation';
 
 const getTypeQuery = (type) => {
     const query = `
@@ -39,16 +40,11 @@ const getTypeQuery = (type) => {
 
 class SingleView extends React.Component {
     getErrorMessage = (field, value) => {
+        value =  value + ''; //only strings can be validated
 
-        if (field.type === 'Int') {
-            if (!Number.isInteger(value)) {
-                return 'Value showed be an Int';
-            }
-        }
-
-        return value.length < 3
-            ? ''
-            : `The length of the input value should less than 3, actual is ${value.length}.`;
+        const ants = field.description || '';
+        const errors = antValidation({ants, value});
+        return errors.join('\m');
     };
 
     render() {
@@ -61,20 +57,23 @@ class SingleView extends React.Component {
         }
 
         const uiFields = type.type.fields.map(field => {
-
+            //TODO Extract this to a util fn
             const fieldConfig = getFieldConfig(field);
-            console.log(fieldConfig);
+            const defaultValue = fieldConfig.default !== undefined ? fieldConfig.default : '';
+            const NoUI = fieldConfig.noui;
 
-            return (data && !error &&
+            return (data && !error && !NoUI &&
                 <div key={`field_${field.name}`}>
-                    <TextField
-                        placeholder="Please fill"
-                        label={field.name}
-                        description={field.description}
-                        value={data[field.name] || ''}
-                        onGetErrorMessage={ (value) => this.getErrorMessage(field, value) }
-                        deferredValidationTime={400}
-                    />
+                        <TextField
+                            placeholder="Please fill"
+                            label={field.name}
+                            description={field.description}
+                            value={data[field.name] || defaultValue}
+                            onGetErrorMessage={ (value) => this.getErrorMessage(field, value) }
+                            deferredValidationTime={400}
+                            disabled={fieldConfig.nouserinput}
+                        />
+                    <hr></hr>
                 </div>
             )
         });

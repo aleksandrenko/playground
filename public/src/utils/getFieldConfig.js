@@ -2,6 +2,7 @@ export default (field) =>
     field.description
         .toLowerCase()
         .split('@')
+        .map(part => part.trim())
         .splice(1)
         .concat([field.type.toLowerCase()])
         .reduce((sum, annotation) => {
