@@ -21,6 +21,7 @@ import { initializeIcons } from '@uifabric/icons';
 
 import getSingleView from "./Components/SingleView";
 import getListView from "./Components/ListView";
+import getFormView from "./Components/FormView";
 initializeIcons();
 
 class App extends React.Component {
@@ -102,6 +103,14 @@ class App extends React.Component {
                                     ? getListView(entry)
                                     : getSingleView(entry);
 
+                                return <Route key={url} exact path={url} component={View} />
+                            })
+                        }
+                        {
+                            serverSchema.mutationTypes &&
+                            serverSchema.mutationTypes.map(entry => {
+                                const url = `/${entry.name}`;
+                                const View = getFormView(entry);
                                 return <Route key={url} exact path={url} component={View} />
                             })
                         }

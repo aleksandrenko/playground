@@ -54,3 +54,7 @@ body {
   padding: 10px;
   flex: 1;
 }
+
+.tabs li {
+  display: inline-block;
+}

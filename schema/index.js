@@ -1,15 +1,20 @@
 import { makeExecutableSchema } from 'graphql-tools';
 
-import { ProductType, ProductsResolver, ProductResolver} from './products';
+import { ProductType, ProductsResolver, ProductResolver, createProduct} from './products';
 import { IngredientType, IngredientResolver } from './ingredients';
 
 // The GraphQL schema in string form
 const typeDefs = `
   type Query { 
     products: [Product]
-    product: Product
+    product (id: Int!): Product
     ingredients: [Ingredient]
   }
+  
+  type Mutation {
+    createProduct (name: String): Product
+  }
+  
   ${ProductType}
   ${IngredientType}
 `;
@@ -21,6 +26,9 @@ const resolvers = {
         product: ProductResolver,
         ingredients: IngredientResolver
     },
+    Mutation: {
+        createProduct: createProduct
+    }
 };
 
 const logger = {

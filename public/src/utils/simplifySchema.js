@@ -18,6 +18,7 @@ export default (fields) => {
 
     const schema = {
         queryTypes: [],
+        mutationTypes: [],
         types: []
     };
 
@@ -45,11 +46,36 @@ export default (fields) => {
                 isList: queryType.type.constructor.name === 'GraphQLList',
                 type: schema.types.find(_type => {
                     return _type.name === (queryType.type.name || queryType.type.ofType.name);
+                }),
+                arguments: queryType.args.map(arg => {
+                    return {
+                        name: arg.name,
+                        description: arg.description,
+                        type: (arg.type.name || arg.type.ofType.name)
+                    };
                 })
             };
 
             return field;
         });
+
+    schema.mutationTypes = Object.values(fields._mutationType._fields).map(mutationType => {
+        console.log('type', mutationType);
+
+        return {
+            name: mutationType.name,
+            returnType: schema.types.find(_type => {
+                return _type.name === (mutationType.type.name || mutationType.type.ofType.name);
+            }),
+            arguments: mutationType.args.map(arg => {
+                return {
+                    name: arg.name,
+                    description: arg.description,
+                    type: (arg.type.name || arg.type.ofType.name)
+                };
+            })
+        }
+    });
 
     console.log('simplified schema', schema);
 

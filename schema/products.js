@@ -43,6 +43,17 @@
 
 export const ProductType = `
     type Product {
+        id: Int!
+        name: String!
+        email: String
+        isPublic: Boolean
+        description: String
+        img: String
+        creatingDate: String
+        ingredients: [Ingredient]
+    }
+    
+    input ProductInput {
         # @NoUserInput 
         id: Int!
         
@@ -63,27 +74,49 @@ export const ProductType = `
         
         # Date of Creation @Date
         creatingDate: String
-        
-        # All product ingredients
-        ingredients: [Ingredient]
     }
 `;
 
 const dummyData = () => {
     var data = [];
 
-    for(var i = 0; i<100; i++) {
+    for(var i = 0; i<5; i++) {
         data.push({
             id: i,
             name: Math.random()*10000,
             description: Math.random()*10000,
-            img: null
+            img: null,
+            creatingDate: new Date()
         });
     }
 
     return data;
 };
 
-export const ProductResolver = () => dummyData()[1];
+let createdProducts = dummyData();
 
-export const ProductsResolver = dummyData;
+export const ProductResolver = (_, { id }) => {
+    return createdProducts.find(product => {
+        return product.id === id;
+    });
+};
+
+export const createProduct = (_, params) => {
+    console.log('_', params);
+    const id = createdProducts.length+1;
+
+    createdProducts.unshift({
+        id: createdProducts.length+1,
+        name: params.name,
+        description: '',
+        img: null,
+        isPublic: true,
+        creatingDate: new Date()
+    });
+
+    return createdProducts.find(product => {
+        return product.id === id;
+    });
+};
+
+export const ProductsResolver = () => createdProducts;

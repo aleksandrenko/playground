@@ -7,6 +7,7 @@ class NavComponent extends React.Component {
     render() {
         const schema = this.props.schema || [];
         const items = schema.queryTypes || [];
+        const mutations = schema.mutationTypes || [];
 
         return (
             <ul className="tabs">
@@ -15,13 +16,33 @@ class NavComponent extends React.Component {
                         const url = `/${item.name}`;
 
                         return (
-                            <NavLink
-                                key={url}
-                                to={url}
-                                activeClassName="activeNav"
-                            >
-                                { item.name }
-                            </NavLink>
+                            <li>
+                                <NavLink
+                                    key={url}
+                                    to={url}
+                                    activeClassName="activeNav"
+                                >
+                                    { item.name }
+                                </NavLink>
+                            </li>
+                        )
+                    })
+                }
+                <li>|</li>
+                {
+                    mutations.map(item => {
+                        const url = `/${item.name}`;
+
+                        return (
+                            <li>
+                                <NavLink
+                                    key={url}
+                                    to={url}
+                                    activeClassName="activeNav"
+                                >
+                                    { item.name }
+                                </NavLink>
+                            </li>
                         )
                     })
                 }

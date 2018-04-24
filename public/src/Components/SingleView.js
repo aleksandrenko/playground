@@ -3,16 +3,7 @@ import gql from "graphql-tag";
 import {graphql} from "react-apollo/index";
 
 import Spinner from './Spinner';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
-import { Slider } from 'office-ui-fabric-react/lib/Slider';
-
-import getFieldConfig from '../utils/getFieldConfig';
-import antValidation from 'antvalidation';
 
 const getTypeQuery = (type) => {
     const query = `
@@ -38,14 +29,8 @@ const getTypeQuery = (type) => {
     return query;
 };
 
-class SingleView extends React.Component {
-    getErrorMessage = (field, value) => {
-        value =  value + ''; //only strings can be validated
 
-        const ants = field.description || '';
-        const errors = antValidation({ants, value});
-        return errors.join('\m');
-    };
+class SingleView extends React.Component {
 
     render() {
         const type = this.props.type;
@@ -57,23 +42,10 @@ class SingleView extends React.Component {
         }
 
         const uiFields = type.type.fields.map(field => {
-            //TODO Extract this to a util fn
-            const fieldConfig = getFieldConfig(field);
-            const defaultValue = fieldConfig.default !== undefined ? fieldConfig.default : '';
-            const NoUI = fieldConfig.noui;
-
-            return (data && !error && !NoUI &&
+            return (data && !error &&
                 <div key={`field_${field.name}`}>
-                        <TextField
-                            placeholder="Please fill"
-                            label={field.name}
-                            description={field.description}
-                            value={data[field.name] || defaultValue}
-                            onGetErrorMessage={ (value) => this.getErrorMessage(field, value) }
-                            deferredValidationTime={400}
-                            disabled={fieldConfig.nouserinput}
-                        />
-                    <hr></hr>
+                    <div><b>{ field.name }:</b> {data[field.name]}</div>
+                    <div>{ field.description }</div>
                 </div>
             )
         });
