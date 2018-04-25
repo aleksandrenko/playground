@@ -27,10 +27,13 @@ const getQueryQL = (type) => {
             acc += '(';
         }
 
-        acc += `$${arg.name}: ${arg.type}!`;
+        const isRequiredString = arg.isRequired ? '!' : '';
+        acc += `$${arg.name}: ${arg.type}${isRequiredString}`;
 
         if (index+1 === args.length) {
             acc += ')';
+        } else {
+            acc += ', ';
         }
 
         return acc;
@@ -44,12 +47,12 @@ const getQueryQL = (type) => {
 
         if (index+1 === args.length) {
             acc += ')';
+        } else {
+            acc += ', ';
         }
 
         return acc;
     }, '');
-
-    console.log('vars', vars);
 
     const qlString = `
               query ${queryName}Query${varDefinitions} {
@@ -58,6 +61,8 @@ const getQueryQL = (type) => {
                 }
               }
             `;
+
+    console.log('gql', qlString);
 
     return gql`
         ${qlString}
@@ -98,7 +103,7 @@ export default (type) => {
     return graphql(getQueryQL(type),
     {
         options: (ownProps) => ({
-            variables: ownProps.params
+            variables: ownProps.params || {}
         }),
         props: (args) => {
             return {

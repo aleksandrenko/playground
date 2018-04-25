@@ -72,3 +72,8 @@ body {
 .withFilter .content {
   flex: 1;
 }
+
+.withFilter .filters li {
+  display: inline-block;
+  padding-right: 10px;
+}

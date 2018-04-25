@@ -51,7 +51,8 @@ export default (fields) => {
                     return {
                         name: arg.name,
                         description: arg.description,
-                        type: (arg.type.name || arg.type.ofType.name)
+                        type: (arg.type.name || arg.type.ofType.name),
+                        isRequired: getIsRequired(arg)
                     };
                 })
             };
@@ -60,8 +61,6 @@ export default (fields) => {
         });
 
     schema.mutationTypes = Object.values(fields._mutationType._fields).map(mutationType => {
-        console.log('type', mutationType);
-
         return {
             name: mutationType.name,
             returnType: schema.types.find(_type => {
@@ -71,7 +70,8 @@ export default (fields) => {
                 return {
                     name: arg.name,
                     description: arg.description,
-                    type: (arg.type.name || arg.type.ofType.name)
+                    type: (arg.type.name || arg.type.ofType.name),
+                    isRequired: getIsRequired(arg)
                 };
             })
         }
