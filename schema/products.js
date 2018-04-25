@@ -108,7 +108,8 @@ export const createProduct = (_, params) => {
     createdProducts.unshift({
         id: createdProducts.length+1,
         name: params.name,
-        description: '',
+        email: params.email,
+        description: params.description || '',
         img: null,
         isPublic: true,
         creatingDate: new Date()

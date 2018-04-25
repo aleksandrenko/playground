@@ -12,7 +12,7 @@ const typeDefs = `
   }
   
   type Mutation {
-    createProduct (name: String): Product
+    createProduct (name: String, email: String, description: String): Product
   }
   
   ${ProductType}

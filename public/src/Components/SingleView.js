@@ -1,86 +1,75 @@
 import React from 'react';
-import gql from "graphql-tag";
-import {graphql} from "react-apollo/index";
 
-import Spinner from './Spinner';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-
-const getTypeQuery = (type) => {
-    const query = `
-        ${type.name} {
-            ${
-        type.type.fields
-            .map(field => {
-                let string = field.name;
-
-                if (field.type === 'List') {
-                    string += `{
-                                id
-                            }`;
-                }
-
-                return string;
-            })
-            .join('\n')
-        }
-        }
-    `;
-
-    return query;
-};
+import getSingleViewResults from './SingleViewResults';
 
 
-class SingleView extends React.Component {
+class SingleFilterView extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    tempValues = {};
+
+    updateFilter = () => {
+        const newState = Object.assign({}, this.tempValues);
+        this.setState(newState);
+    };
+
+    onValueUIChange = (_value) => {
+        const name = _value.target.name;
+        const value = _value.target.value;
+        this.tempValues[name] = value;
+    };
 
     render() {
         const type = this.props.type;
-        const { loading, error, refetch } = this.props.data;
-        const data = this.props.data[type.name];
+        const DetailsView = this.props.detailsView;
 
-        if (loading) {
-            return <Spinner label='Loading ...' />
-        }
+        const uiElements = type.arguments.map((arg) => {
+            return (
+                <li key={arg.name}>
+                    {arg.name}: <input
+                        type="text"
+                        name={arg.name}
+                        onChange={this.onValueUIChange}
+                    />
+                    <div><small>{ arg.description }</small></div>
 
-        const uiFields = type.type.fields.map(field => {
-            return (data && !error &&
-                <div key={`field_${field.name}`}>
-                    <div><b>{ field.name }:</b> {data[field.name]}</div>
-                    <div>{ field.description }</div>
-                </div>
-            )
+                    <br/>
+
+                    <DefaultButton
+                        primary={ true }
+                        text='Update'
+                        onClick={ this.updateFilter }
+                    />
+                </li>
+            );
         });
 
         return (
             <div>
-                <h1>{ type.name }</h1>
-                { error && <div style={{ color: 'red' }}>{ error.message }</div> }
-
-                { uiFields }
-
-                <DefaultButton
-                    onClick={ () => { console.log('Update TODO') }}
-                    primary={ true }
-                >
-                    Update
-                </DefaultButton>
-
-                <DefaultButton onClick={() => refetch()}>Refresh</DefaultButton>
+                <div className="withFilter">
+                    <div className="header">
+                        <ul>
+                            { uiElements }
+                        </ul>
+                    </div>
+                    <div className="content">
+                        <DetailsView params={this.state} />
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
-export default (type) => {
-    return graphql(gql`
-      query AppQuery {
-        ${getTypeQuery(type)}
-      }
-    `, {
-        props: (args) => {
-            return {
-                ...args,
-                type
-            }
-        }
-    })(SingleView);
-};
+
+export default (type) => (props) => (
+    <SingleFilterView
+        type={type}
+        detailsView={getSingleViewResults(type)}
+    />
+);

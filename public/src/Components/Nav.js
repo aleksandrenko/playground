@@ -16,9 +16,8 @@ class NavComponent extends React.Component {
                         const url = `/${item.name}`;
 
                         return (
-                            <li>
+                            <li key={url}>
                                 <NavLink
-                                    key={url}
                                     to={url}
                                     activeClassName="activeNav"
                                 >
@@ -34,7 +33,7 @@ class NavComponent extends React.Component {
                         const url = `/${item.name}`;
 
                         return (
-                            <li>
+                            <li key={url}>
                                 <NavLink
                                     key={url}
                                     to={url}

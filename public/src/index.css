@@ -58,3 +58,17 @@ body {
 .tabs li {
   display: inline-block;
 }
+
+.withFilter {
+  display: flex;
+  flex-direction: column;
+}
+
+.withFilter .header {
+  background: #eee;
+  padding: 10px;
+}
+
+.withFilter .content {
+  flex: 1;
+}

@@ -80,6 +80,8 @@ class ListView extends React.Component {
         const data = this.props.data[type.name];
         const columns = createColumns(type);
 
+        console.log('ListView', type);
+
         if (loading) {
             return <Spinner label='Loading ...' />
         }
