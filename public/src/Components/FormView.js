@@ -2,6 +2,9 @@ import React from 'react';
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+
+
 // https://www.apollographql.com/docs/react/essentials/mutations.html
 
 // import Spinner from './Spinner';
@@ -116,7 +119,12 @@ export default (type) => {
 
                                 { uiFields }
 
-                                <button type="submit">Add Todo</button>
+                                <DefaultButton
+                                    type="submit"
+                                    primary={ true }
+                                >
+                                    Add Todo
+                                </DefaultButton>
 
                                 <div>{ JSON.stringify(data) }</div>
                             </form>
