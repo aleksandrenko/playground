@@ -77,3 +77,9 @@ body {
   display: inline-block;
   padding-right: 10px;
 }
+
+.withFilter .filters li span {
+  text-transform: capitalize;
+  display: inline-block;
+  padding-right: 5px;
+}

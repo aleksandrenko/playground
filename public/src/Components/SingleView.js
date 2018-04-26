@@ -69,7 +69,7 @@ class SingleFilterView extends React.Component {
 
             return (
                 <li key={arg.name}>
-                    {arg.name}:
+                    <span>{arg.name}:</span>
                     <input
                         type="text"
                         name={arg.name}

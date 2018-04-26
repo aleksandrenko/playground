@@ -7,47 +7,7 @@ import Grid from './Grid';
 import Spinner from './Spinner';
 
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-
-const _onColumnClick = (ev, column) => {
-    console.log('_onColumnClick', ev, column);
-    // const { columns, items } = this.state;
-    // let newItems = items.slice();
-    // const newColumns = columns.slice();
-    // const currColumn = newColumns.filter((currCol, idx) => {
-    //     return column.key === currCol.key;
-    // })[0];
-    // newColumns.forEach((newCol) => {
-    //     if (newCol === currColumn) {
-    //         currColumn.isSortedDescending = !currColumn.isSortedDescending;
-    //         currColumn.isSorted = true;
-    //     } else {
-    //         newCol.isSorted = false;
-    //         newCol.isSortedDescending = true;
-    //     }
-    // });
-    // newItems = this._sortItems(newItems, currColumn.fieldName, currColumn.isSortedDescending);
-    // this.setState({
-    //     columns: newColumns,
-    //     items: newItems
-    // });
-};
-
-const createColumns = (type) => type
-    ? type.type.fields.map(field => ({
-        key: `${field.name}_column`,
-        name: field.name,
-        fieldName: field.name,
-        minWidth: 210,
-        maxWidth: 350,
-        isRowHeader: true,
-        isResizable: true,
-        isSorted: true,
-        isSortedDescending: false,
-        onColumnClick: _onColumnClick,
-        data: field.type.toLowerCase(),
-        isPadded: true
-    }))
-    : [];
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 const getTypeQuery = (type) => {
     const query = `
@@ -74,13 +34,73 @@ const getTypeQuery = (type) => {
 };
 
 class ListView extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hideDialog: true,
+            selectedItem: {}
+        }
+    }
+
+    createColumns = (type) => type
+        ? type.type.fields
+            .map(field => ({
+                key: `${field.name}_column`,
+                name: field.name,
+                fieldName: field.name,
+                minWidth: 210,
+                maxWidth: 350,
+                isRowHeader: true,
+                isResizable: true,
+                data: field.type.toLowerCase()
+            }))
+        : [];
+
+    _closeDialog = () => {
+        this.setState({
+            hideDialog: true
+        });
+    };
+
+
+    _onColumnClick = (ev, column) => {
+        this.setState({
+            hideDialog: false,
+            selectedItem: ev
+        });
+
+        console.log('click');
+
+        // const { columns, items } = this.state;
+        // let newItems = items.slice();
+        // const newColumns = columns.slice();
+        // const currColumn = newColumns.filter((currCol, idx) => {
+        //     return column.key === currCol.key;
+        // })[0];
+        // newColumns.forEach((newCol) => {
+        //     if (newCol === currColumn) {
+        //         currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        //         currColumn.isSorted = true;
+        //     } else {
+        //         newCol.isSorted = false;
+        //         newCol.isSortedDescending = true;
+        //     }
+        // });
+        // newItems = this._sortItems(newItems, currColumn.fieldName, currColumn.isSortedDescending);
+        // this.setState({
+        //     columns: newColumns,
+        //     items: newItems
+        // });
+    };
+
+
     render() {
         const type = this.props.type;
         const { loading, error, refetch } = this.props.data;
         const data = this.props.data[type.name];
-        const columns = createColumns(type);
-
-        console.log('ListView', type);
+        const columns = this.createColumns(type);
 
         if (loading) {
             return <Spinner label='Loading ...' />
@@ -98,9 +118,33 @@ class ListView extends React.Component {
                     </MessageBar>
                 }
 
+                <Dialog
+                    hidden={ this.state.hideDialog }
+                    onDismiss={ this._closeDialog }
+                    dialogContentProps={ {
+                        type: DialogType.normal,
+                        title: `${ this.state.selectedItem.__typename }`
+                    } }
+                    modalProps={ {
+                        titleAriaId: 'myLabelId',
+                        subtitleAriaId: 'mySubTextId',
+                        isBlocking: false,
+                        containerClassName: 'ms-dialogMainOverride'
+                    } }
+                >
+                    <div>
+                        { Object.keys(this.state.selectedItem)
+                            .map(itemKey => {
+                                return <div key={itemKey}>{itemKey}: { this.state.selectedItem[itemKey] }</div>
+                            })
+                        }
+                    </div>
+                </Dialog>
+
                 <Grid
                     items={data}
                     columns={columns}
+                    onColumnClick={this._onColumnClick}
                 />
                 <button onClick={() => refetch()}>Refresh</button>
             </div>
