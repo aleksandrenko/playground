@@ -1,22 +1,10 @@
 import React from 'react';
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
+import FieldFormFields from "./FieldFormFields";
+import FieldViewFields from './FieldViewFields';
 
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-
-
-// https://www.apollographql.com/docs/react/essentials/mutations.html
-
-// import Spinner from './Spinner';
-// import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-// import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-// import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-// import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
-// import { Slider } from 'office-ui-fabric-react/lib/Slider';
-
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import getFieldConfig from '../utils/getFieldConfig';
-import antValidation from 'antvalidation';
 
 const getMutationArgs = (_args) => {
     const args = _args.map(arg => {
@@ -51,47 +39,13 @@ const getResultValueNames = (_returnValue) => {
     return names.join('\n');
 };
 
-const getErrorMessage = (field, value) => {
-    value =  value + ''; //only strings can be validated
-
-    const ants = field.description || '';
-    const errors = antValidation({ants, value});
-    return errors.join('\n');
-};
-
 const formData = {};
-
-const getFieldsFromArguments = (_args) => {
-    const elements = _args.map(field => {
-        const fieldConfig = getFieldConfig(field);
-        const defaultValue = fieldConfig.default !== undefined ? fieldConfig.default : '';
-        const NoUI = fieldConfig.noui;
-
-        return (!NoUI &&
-            <div key={`field_${field.name}`}>
-                <TextField
-                    placeholder="Please fill"
-                    label={field.name}
-                    description={field.description}
-                    value={defaultValue}
-                    onGetErrorMessage={ (value) => getErrorMessage(field, value) }
-                    deferredValidationTime={400}
-                    disabled={fieldConfig.nouserinput}
-                    onChanged={ (value) => { formData[field.name] = value } }
-                />
-            </div>
-        )
-    });
-
-    return elements;
-};
 
 
 export default (type) => {
     const args = getMutationArgs(type.arguments);
     const fragArgs = getMutationFragmentArgs(type.arguments);
     const returnValueNames = getResultValueNames(type.returnType);
-    const uiFields = getFieldsFromArguments(type.arguments);
 
     const QL = `
         mutation ${type.name}(${args}) {
@@ -117,7 +71,10 @@ export default (type) => {
                                 }}
                             >
 
-                                { uiFields }
+                                <FieldFormFields
+                                    type={type}
+                                    formData={formData}
+                                />
 
                                 <DefaultButton
                                     type="submit"
@@ -126,7 +83,9 @@ export default (type) => {
                                     Add Todo
                                 </DefaultButton>
 
-                                <div>{ JSON.stringify(data) }</div>
+                                <div>
+                                    <FieldViewFields entity={data} />
+                                </div>
                             </form>
                         </div>
                     )}
@@ -134,7 +93,6 @@ export default (type) => {
             );
         }
     }
-
 
     return FormView;
 }

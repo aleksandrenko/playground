@@ -6,8 +6,8 @@ import { IngredientType, IngredientResolver } from './ingredients';
 // The GraphQL schema in string form
 const typeDefs = `
   type Query { 
-    products: [Product]
-    product (id: Int!): Product
+    products(isPublic: Boolean): [Product]
+    product(id: Int!, name: String): Product
     ingredients: [Ingredient]
   }
   
@@ -32,7 +32,7 @@ const resolvers = {
 };
 
 const logger = {
-    log: e => console.log(e)
+    log: e => console.log('logger', e)
 };
 
 // Put together a schema

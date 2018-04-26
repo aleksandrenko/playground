@@ -80,12 +80,13 @@ export const ProductType = `
 const dummyData = () => {
     var data = [];
 
-    for(var i = 0; i<5; i++) {
+    for(var i = 0; i<15; i++) {
         data.push({
             id: i,
             name: Math.random()*10000,
             description: Math.random()*10000,
             img: null,
+            isPublic: (Math.random() > 0.5),
             creatingDate: new Date()
         });
     }
@@ -120,4 +121,10 @@ export const createProduct = (_, params) => {
     });
 };
 
-export const ProductsResolver = () => createdProducts;
+export const ProductsResolver = (_, { isPublic }) => {
+    if (isPublic === undefined) {
+        return createdProducts;
+    }
+
+    return createdProducts.filter(product => product.isPublic === isPublic);
+};

@@ -3,32 +3,41 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import Grid from './Grid';
 import Spinner from './Spinner';
 
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
+import FieldViewFields from './FieldViewFields';
+
+import {
+    DetailsList,
+    DetailsListLayoutMode,
+    CheckboxVisibility
+} from 'office-ui-fabric-react/lib/DetailsList';
+
+
 const getTypeQuery = (type) => {
-    const query = `
-        ${type.name} {
-            ${ 
-                type.type.fields
-                    .map(field => {
-                        let string = field.name;
-                        
-                        if (field.type === 'List') {
-                            string += `{
-                                id
-                            }`;
-                        }
-                        
-                        return string;
-                    })
-                    .join('\n') 
+    const query = gql`
+        query AppQuery {
+            ${type.name} {
+                ${ 
+                    type.type.fields
+                        .map(field => {
+                            let string = field.name;
+                            
+                            if (field.type === 'List') {
+                                string += `{
+                                    id
+                                }`;
+                            }
+                            
+                            return string;
+                        })
+                        .join('\n') 
+                }
             }
-        }
-    `;
+        }`;
 
     return query;
 };
@@ -40,7 +49,9 @@ class ListView extends React.Component {
 
         this.state = {
             hideDialog: true,
-            selectedItem: {}
+            selectedItem: {
+                data: {}
+            }
         }
     }
 
@@ -64,37 +75,14 @@ class ListView extends React.Component {
         });
     };
 
-
     _onColumnClick = (ev, column) => {
         this.setState({
             hideDialog: false,
-            selectedItem: ev
+            selectedItem: {
+                data: ev
+            }
         });
-
-        console.log('click');
-
-        // const { columns, items } = this.state;
-        // let newItems = items.slice();
-        // const newColumns = columns.slice();
-        // const currColumn = newColumns.filter((currCol, idx) => {
-        //     return column.key === currCol.key;
-        // })[0];
-        // newColumns.forEach((newCol) => {
-        //     if (newCol === currColumn) {
-        //         currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        //         currColumn.isSorted = true;
-        //     } else {
-        //         newCol.isSorted = false;
-        //         newCol.isSortedDescending = true;
-        //     }
-        // });
-        // newItems = this._sortItems(newItems, currColumn.fieldName, currColumn.isSortedDescending);
-        // this.setState({
-        //     columns: newColumns,
-        //     items: newItems
-        // });
     };
-
 
     render() {
         const type = this.props.type;
@@ -123,29 +111,27 @@ class ListView extends React.Component {
                     onDismiss={ this._closeDialog }
                     dialogContentProps={ {
                         type: DialogType.normal,
-                        title: `${ this.state.selectedItem.__typename }`
+                        title: `${ this.state.selectedItem.data.__typename }`
                     } }
-                    modalProps={ {
-                        titleAriaId: 'myLabelId',
-                        subtitleAriaId: 'mySubTextId',
-                        isBlocking: false,
-                        containerClassName: 'ms-dialogMainOverride'
-                    } }
+                    modalProps={{
+                        isBlocking: false
+                    }}
                 >
                     <div>
-                        { Object.keys(this.state.selectedItem)
-                            .map(itemKey => {
-                                return <div key={itemKey}>{itemKey}: { this.state.selectedItem[itemKey] }</div>
-                            })
-                        }
+                        <FieldViewFields entity={this.state.selectedItem} />
                     </div>
                 </Dialog>
 
-                <Grid
-                    items={data}
-                    columns={columns}
-                    onColumnClick={this._onColumnClick}
+                <DetailsList
+                    items={ data }
+                    columns={ columns }
+                    setKey='set'
+                    layoutMode={ DetailsListLayoutMode.justified }
+                    isHeaderVisible={ true }
+                    onItemInvoked={ this._onColumnClick}
+                    checkboxVisibility={CheckboxVisibility.hidden}
                 />
+
                 <button onClick={() => refetch()}>Refresh</button>
             </div>
         );
@@ -153,11 +139,7 @@ class ListView extends React.Component {
 }
 
 export default (type) => {
-    return graphql(gql`
-      query AppQuery {
-        ${getTypeQuery(type)}
-      }
-    `, {
+    return graphql(getTypeQuery(type), {
         props: (args) => {
             return {
                 ...args,

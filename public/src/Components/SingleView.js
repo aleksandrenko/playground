@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import getSingleViewResults from './SingleViewResults';
+import getFieldView from './FieldView';
 
 const getSearchParamsFromUrl = (history) => {
     return history.location.search
@@ -61,7 +61,7 @@ class SingleFilterView extends React.Component {
     };
 
     render() {
-        const DetailsView = this.props.detailsView;
+        const FieldView = getFieldView(this.props.type);
         const searchParams = getSearchParamsFromUrl(this.props.history);
 
         const uiElements = this.props.type.arguments.map((arg) => {
@@ -99,7 +99,7 @@ class SingleFilterView extends React.Component {
                     </div>
                     <div className="content">
                         { Object.keys(searchParams).length
-                            ? <DetailsView params={searchParams} />
+                            ? <FieldView params={searchParams} />
                             : <div>Enter input value.</div>
                         }
                     </div>
@@ -113,7 +113,6 @@ class SingleFilterView extends React.Component {
 export default (type) => (props) => (
     <SingleFilterView
         type={type}
-        detailsView={getSingleViewResults(type)}
         { ...props }
     />
 );

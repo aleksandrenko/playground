@@ -14,70 +14,79 @@ const getType = (field) => {
 
 const getIsRequired = (field) => field.type.constructor.name === 'GraphQLNonNull';
 
+const getSimplifyField = (_field) => ({
+    name: _field.name,
+    type: getType(_field),
+    isRequired: getIsRequired(_field),
+    description: _field.description
+});
+
+const isList = (queryType) => queryType.type.constructor.name === 'GraphQLList';
+
+
+const getTypeDefinitionFromGraphQLTypes = (types, typeToFind) => types
+    .find(_type => _type.name === (typeToFind.type.name || typeToFind.type.ofType.name));
+
+
+/**
+ * A simple js transformation from graphql schema to simpler object for easier handling
+ * @param fields
+ * @returns {{queryTypes: Array, mutationTypes: Array, types: Array}}
+ */
+
 export default (fields) => {
 
-    const schema = {
-        queryTypes: [],
-        mutationTypes: [],
-        types: []
-    };
+    console.log('GraphQL Schema', fields);
 
-    console.log('raw data', fields);
-
-    schema.types = Object.values(fields._typeMap)
+    /**
+     * Simplifying schema types
+     * @type {{name: *, description: *, fields: {name: *, type: *, isRequired: *, description: *}[]}[]}
+     */
+    const schemaTypes = Object.values(fields._typeMap)
         .filter(field => field.astNode !== undefined)
         .filter(field => field.name !== 'Query')
-        .map(field => ({
-            name: field.name,
-            description: field.description,
-            fields: Object.values(field._fields)
-                .map(_field => ({
-                    name: _field.name,
-                    type: getType(_field),
-                    isRequired: getIsRequired(_field),
-                    description: _field.description
-                }))
+        .map(schemaField => ({
+            name: schemaField.name,
+            description: schemaField.description,
+            fields: Object.values(schemaField._fields)
+                .map(getSimplifyField)
         }));
 
-    schema.queryTypes = Object.values(fields._queryType._fields)
-        .map(queryType => {
-            const field = {
+    /**
+     * Simplifying schema query types
+     * @type {{name: string, isList: *, type: *, arguments: {name: *, type: *, isRequired: *, description: *}[]}[]}
+     */
+    const queryTypes = Object.values(fields._queryType._fields)
+        .map(queryType => ({
                 name: queryType.name,
-                isList: queryType.type.constructor.name === 'GraphQLList',
-                type: schema.types.find(_type => {
-                    return _type.name === (queryType.type.name || queryType.type.ofType.name);
-                }),
-                arguments: queryType.args.map(arg => {
-                    return {
-                        name: arg.name,
-                        description: arg.description,
-                        type: (arg.type.name || arg.type.ofType.name),
-                        isRequired: getIsRequired(arg)
-                    };
-                })
-            };
-
-            return field;
-        });
-
-    schema.mutationTypes = Object.values(fields._mutationType._fields).map(mutationType => {
-        return {
-            name: mutationType.name,
-            returnType: schema.types.find(_type => {
-                return _type.name === (mutationType.type.name || mutationType.type.ofType.name);
-            }),
-            arguments: mutationType.args.map(arg => {
-                return {
-                    name: arg.name,
-                    description: arg.description,
-                    type: (arg.type.name || arg.type.ofType.name),
-                    isRequired: getIsRequired(arg)
-                };
+                isList: isList(queryType),
+                type: getTypeDefinitionFromGraphQLTypes(schemaTypes, queryType),
+                arguments: queryType.args
+                    .map(getSimplifyField)
             })
-        }
-    });
+        );
 
-    console.log('simplified schema', schema);
+    /**
+     * Simplifying schema mutations
+     * @type {{name: string, returnType: *, arguments: {name: *, type: *, isRequired: *, description: *}[]}[]}
+     */
+    const mutationTypes = Object.values(fields._mutationType._fields)
+        .map(mutationType => ({
+                name: mutationType.name,
+                returnType: getTypeDefinitionFromGraphQLTypes(schemaTypes, mutationType),
+                arguments: mutationType.args.map(getSimplifyField)
+            })
+        );
 
-    return schema;
+    console.log('Simplified schema');
+    console.log('Query Types:', queryTypes);
+    console.log('Mutation Types:', mutationTypes);
+    console.log('Schema Types:', schemaTypes);
+    console.log('');
+
+    return {
+        queryTypes,
+        mutationTypes,
+        schemaTypes
+    };
 }

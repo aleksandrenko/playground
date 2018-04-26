@@ -4,6 +4,8 @@ import {graphql} from "react-apollo/index";
 
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
+import FieldViewFields from './FieldViewFields';
+
 import Spinner from './Spinner';
 
 
@@ -22,37 +24,41 @@ const getQueryQL = (type) => {
             return string;
         })
         .join('\n');
-    const varDefinitions = type.arguments.reduce((acc, arg, index, args) => {
-        if (index === 0) {
-            acc += '(';
-        }
 
-        const isRequiredString = arg.isRequired ? '!' : '';
-        acc += `$${arg.name}: ${arg.type}${isRequiredString}`;
+    const varDefinitions = type.arguments
+        .reduce((acc, arg, index, args) => {
+            if (index === 0) {
+                acc += '(';
+            }
 
-        if (index+1 === args.length) {
-            acc += ')';
-        } else {
-            acc += ', ';
-        }
+            const isRequiredString = arg.isRequired ? '!' : '';
+            acc += `$${arg.name}: ${arg.type}${isRequiredString}`;
 
-        return acc;
-    }, '');
-    const vars = type.arguments.reduce((acc, arg, index, args) => {
-        if (index === 0) {
-            acc += '(';
-        }
+            if (index+1 === args.length) {
+                acc += ')';
+            } else {
+                acc += ', ';
+            }
 
-        acc += `${arg.name}: $${arg.name}`;
+            return acc;
+        }, '');
 
-        if (index+1 === args.length) {
-            acc += ')';
-        } else {
-            acc += ', ';
-        }
+    const vars = type.arguments
+        .reduce((acc, arg, index, args) => {
+            if (index === 0) {
+                acc += '(';
+            }
 
-        return acc;
-    }, '');
+            acc += `${arg.name}: $${arg.name}`;
+
+            if (index+1 === args.length) {
+                acc += ')';
+            } else {
+                acc += ', ';
+            }
+
+            return acc;
+        }, '');
 
     const qlString = `
               query ${queryName}Query${varDefinitions} {
@@ -69,7 +75,7 @@ const getQueryQL = (type) => {
     `;
 };
 
-class SingleView extends React.Component {
+class FieldView extends React.Component {
 
     render() {
         const type = this.props.type;
@@ -80,19 +86,17 @@ class SingleView extends React.Component {
             return <Spinner label='Loading ...' />
         }
 
-        const uiFields = type.type.fields.map(field => {
-            return (data && !error &&
-                <div key={`field_${field.name}`}>
-                    <div><b>{ field.name }:</b> {data[field.name]}</div>
-                    <div>{ field.description }</div>
-                </div>
-            )
-        });
-
         return (
             <div>
                 { error && <div style={{ color: 'red' }}>{ error.message }</div> }
-                { uiFields }
+
+                { !error &&
+                    <FieldViewFields
+                        data={data}
+                        type={type}
+                    />
+                }
+
                 <DefaultButton onClick={() => refetch()}>Refresh</DefaultButton>
             </div>
         );
@@ -112,5 +116,5 @@ export default (type) => {
             }
         }
     }
-    )(SingleView);
+    )(FieldView);
 };
