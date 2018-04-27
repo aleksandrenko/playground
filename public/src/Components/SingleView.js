@@ -19,17 +19,15 @@ class SingleFilterView extends React.Component {
         const searchParams = getSearchParamsFromUrl(this.props.history);
 
         return (
-            <div>
-                <div className="withFilter">
-                    <div className="header">
-                        <FiltersToUrlParams { ...this.props } />
-                    </div>
-                    <div className="content">
-                        { Object.keys(searchParams).length
-                            ? <FieldView params={searchParams} />
-                            : <div>Enter input value.</div>
-                        }
-                    </div>
+            <div className="withFilter">
+                <div className="header">
+                    <FiltersToUrlParams { ...this.props } />
+                </div>
+                <div className="content">
+                    { Object.keys(searchParams).length
+                        ? <FieldView params={searchParams} />
+                        : <div>Enter input value.</div>
+                    }
                 </div>
             </div>
         );

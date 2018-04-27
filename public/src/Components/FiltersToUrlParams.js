@@ -30,10 +30,7 @@ class FiltersToUrlParams extends React.Component {
         setHistoryURL(history, searchParams);
     };
 
-    onValueUIChange = (_value) => {
-        const name = _value.target.name;
-        const value = _value.target.value;
-
+    onValueUIChange = ({ name, value }) => {
         const newValues = Object.assign({}, this.state.values);
         newValues[name] = value;
 
@@ -49,33 +46,34 @@ class FiltersToUrlParams extends React.Component {
                 return (
                     <li key={arg.name}>
                         <span>{arg.name}:</span>
-                        <input
-                            type="text"
-                            name={arg.name}
-                            onChange={this.onValueUIChange}
+
+                        <TextField
+                            placeholder="Please fill"
+                            description={arg.description}
+                            onChanged={ (value) => this.onValueUIChange({ name: arg.name, value }) }
                             value={inputValue}
                         />
+
                         <div><small>{ arg.description }</small></div>
                     </li>
                 );
             });
 
-        return (
-            <div className="filterWrapper">
-                <ul className="filters">
-                    { uiElements }
-                </ul>
+        return uiElements.length
+            ? <div className="filterWrapper">
+                    <ul className="filters">
+                        {uiElements}
+                    </ul>
 
-                <br/>
+                    <br/>
 
-                <DefaultButton
-                    primary={ true }
-                    text='Update'
-                    onClick={ this.updateFilter }
-                />
-            </div>
-        );
-
+                    <DefaultButton
+                        primary={true}
+                        text='Update'
+                        onClick={this.updateFilter}
+                    />
+                </div>
+            : null
     }
 }
 

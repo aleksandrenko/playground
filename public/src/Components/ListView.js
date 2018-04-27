@@ -7,6 +7,7 @@ import Spinner from './Spinner';
 
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import FiltersToUrlParams from './FiltersToUrlParams';
 
 import FieldViewFields from './FieldViewFields';
 
@@ -95,17 +96,7 @@ class ListView extends React.Component {
         }
 
         return (
-            <div>
-                { error &&
-                    <MessageBar
-                        messageBarType={ MessageBarType.error }
-                        isMultiline={ false }
-                        dismissButtonAriaLabel='Close'
-                    >
-                        { error.message }
-                    </MessageBar>
-                }
-
+            <div className="withFilter">
                 <Dialog
                     hidden={ this.state.hideDialog }
                     onDismiss={ this._closeDialog }
@@ -117,20 +108,37 @@ class ListView extends React.Component {
                         isBlocking: false
                     }}
                 >
-                    <div>
+                    <div className="dialogContent">
                         <FieldViewFields entity={this.state.selectedItem} />
                     </div>
                 </Dialog>
 
-                <DetailsList
-                    items={ data }
-                    columns={ columns }
-                    setKey='set'
-                    layoutMode={ DetailsListLayoutMode.justified }
-                    isHeaderVisible={ true }
-                    onItemInvoked={ this._onColumnClick}
-                    checkboxVisibility={CheckboxVisibility.hidden}
-                />
+
+                <div className="header">
+                    <FiltersToUrlParams { ...this.props } />
+                </div>
+
+                <div className="content">
+                    { error &&
+                    <MessageBar
+                        messageBarType={ MessageBarType.error }
+                        isMultiline={ false }
+                        dismissButtonAriaLabel='Close'
+                    >
+                        { error.message }
+                    </MessageBar>
+                    }
+
+                    <DetailsList
+                        items={ data }
+                        columns={ columns }
+                        setKey='set'
+                        layoutMode={ DetailsListLayoutMode.justified }
+                        isHeaderVisible={ true }
+                        onItemInvoked={ this._onColumnClick}
+                        checkboxVisibility={CheckboxVisibility.hidden}
+                    />
+                </div>
 
                 <button onClick={() => refetch()}>Refresh</button>
             </div>
