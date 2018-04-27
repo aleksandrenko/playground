@@ -6,7 +6,7 @@ import { IngredientType, IngredientResolver } from './ingredients';
 // The GraphQL schema in string form
 const typeDefs = `
   type Query { 
-    products(isPublic: Boolean): [Product]
+    products(idLargerThen: Int): [Product]
     product(id: Int!, name: String): Product
     ingredients: [Ingredient]
   }

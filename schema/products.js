@@ -96,7 +96,7 @@ const dummyData = () => {
 
 let createdProducts = dummyData();
 
-export const ProductResolver = (_, { id }) => {
+export const ProductResolver = (_, { id, name }) => {
     return createdProducts.find(product => {
         return product.id === id;
     });
@@ -121,10 +121,12 @@ export const createProduct = (_, params) => {
     });
 };
 
-export const ProductsResolver = (_, { isPublic }) => {
-    if (isPublic === undefined) {
+export const ProductsResolver = (_, { idLargerThen }) => {
+    console.log('idLargerThen', idLargerThen);
+
+    if (idLargerThen === undefined) {
         return createdProducts;
     }
 
-    return createdProducts.filter(product => product.isPublic === isPublic);
+    return createdProducts.filter(product => product.id > idLargerThen);
 };

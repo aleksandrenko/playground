@@ -19,8 +19,7 @@ import {Switch, Route, withRouter} from 'react-router-dom';
 
 import { initializeIcons } from '@uifabric/icons';
 
-import getSingleView from "./Components/SingleView";
-import getListView from "./Components/ListView";
+import getView from "./Components/View";
 import getFieldForm from "./Components/FieldForm";
 initializeIcons();
 
@@ -99,10 +98,7 @@ class App extends React.Component {
                             serverSchema.queryTypes &&
                             serverSchema.queryTypes.map(entry => {
                                 const url = `/${entry.name}`;
-                                const View = entry.isList
-                                    ? getListView(entry)
-                                    : getSingleView(entry);
-
+                                const View = getView(entry);
                                 return <Route key={url} exact path={url} component={View} />
                             })
                         }

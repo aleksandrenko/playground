@@ -1,13 +1,10 @@
 import React from 'react';
 
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-
 import Spinner from './Spinner';
 
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import FiltersToUrlParams from './FiltersToUrlParams';
 
 import FieldViewFields from './FieldViewFields';
 
@@ -17,31 +14,8 @@ import {
     CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 
-
-const getTypeQuery = (type) => {
-    const query = gql`
-        query AppQuery {
-            ${type.name} {
-                ${ 
-                    type.type.fields
-                        .map(field => {
-                            let string = field.name;
-                            
-                            if (field.type === 'List') {
-                                string += `{
-                                    id
-                                }`;
-                            }
-                            
-                            return string;
-                        })
-                        .join('\n') 
-                }
-            }
-        }`;
-
-    return query;
-};
+import getSearchParamsFromUrl from "../utils/getSearchParamsFromUrl";
+import getQueryQL from '../utils/generateQL';
 
 class ListView extends React.Component {
 
@@ -90,6 +64,7 @@ class ListView extends React.Component {
         const { loading, error, refetch } = this.props.data;
         const data = this.props.data[type.name];
         const columns = this.createColumns(type);
+        const searchParams = getSearchParamsFromUrl(this.props.history);
 
         if (loading) {
             return <Spinner label='Loading ...' />
@@ -112,11 +87,6 @@ class ListView extends React.Component {
                         <FieldViewFields entity={this.state.selectedItem} />
                     </div>
                 </Dialog>
-
-
-                <div className="header">
-                    <FiltersToUrlParams { ...this.props } />
-                </div>
 
                 <div className="content">
                     { error &&
@@ -147,7 +117,10 @@ class ListView extends React.Component {
 }
 
 export default (type) => {
-    return graphql(getTypeQuery(type), {
+    return graphql(getQueryQL(type), {
+        options: (ownProps) => ({
+            variables: ownProps.params || {}
+        }),
         props: (args) => {
             return {
                 ...args,
