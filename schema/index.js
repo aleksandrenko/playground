@@ -12,7 +12,16 @@ const typeDefs = `
   }
   
   type Mutation {
-    createProduct (name: String, email: String, description: String): Product
+    createProduct (
+        # Client's name @min(10) @max(100)
+        name: String, 
+        
+        # @email
+        email: String, 
+        
+        # A short description @min(10) @max(255)
+        description: String
+    ): Product
   }
   
   ${ProductType}

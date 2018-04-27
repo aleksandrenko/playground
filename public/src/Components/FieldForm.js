@@ -4,8 +4,6 @@ import { Mutation } from "react-apollo";
 import FieldFormFields from "./FieldFormFields";
 import FieldViewFields from './FieldViewFields';
 
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-
 const getMutationArgs = (_args) => {
     const args = _args.map(arg => {
         return `$${arg.name}: ${arg.type}`
@@ -75,13 +73,6 @@ export default (type) => {
                                     type={type}
                                     formData={formData}
                                 />
-
-                                <DefaultButton
-                                    type="submit"
-                                    primary={ true }
-                                >
-                                    Add Todo
-                                </DefaultButton>
 
                                 <div>
                                     <FieldViewFields entity={data} />
