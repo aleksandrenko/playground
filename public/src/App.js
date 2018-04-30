@@ -9,7 +9,7 @@ import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 
 import Nav from './Components/Nav';
-import Spinner from './Components/Spinner';
+import Spinner from './Components/Shared/Spinner';
 
 import NoMatch from './Page/404';
 
@@ -20,7 +20,7 @@ import {Switch, Route, withRouter} from 'react-router-dom';
 import { initializeIcons } from '@uifabric/icons';
 
 import getView from "./Components/View";
-import getFieldForm from "./Components/FieldForm";
+import getFieldForm from "./Components/SingleItemView/Form";
 initializeIcons();
 
 class App extends React.Component {

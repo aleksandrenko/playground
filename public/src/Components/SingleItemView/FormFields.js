@@ -1,6 +1,6 @@
 import React from 'react';
 
-import getFieldConfig from "../utils/getFieldConfig";
+import getFieldConfig from "../../utils/getFieldConfig";
 import antValidation from "antvalidation";
 
 // https://www.apollographql.com/docs/react/essentials/mutations.html
@@ -15,7 +15,7 @@ import antValidation from "antvalidation";
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-class FieldFormFields extends React.Component {
+class FormFields extends React.Component {
     constructor(props) {
         super(props);
 
@@ -102,4 +102,4 @@ class FieldFormFields extends React.Component {
     }
 }
 
-export default FieldFormFields;
+export default FormFields;

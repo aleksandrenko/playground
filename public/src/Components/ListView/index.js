@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { graphql } from 'react-apollo';
-import Spinner from './Spinner';
+import Spinner from '../Shared/Spinner';
 
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
-import FieldViewFields from './FieldViewFields';
+import Details from '../SingleItemView/Details';
 
 import {
     DetailsList,
@@ -14,8 +14,8 @@ import {
     CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 
-import getSearchParamsFromUrl from "../utils/getSearchParamsFromUrl";
-import getQueryQL from '../utils/generateQL';
+import getSearchParamsFromUrl from "../../utils/getSearchParamsFromUrl";
+import getQueryQL from '../../utils/generateQL';
 
 class ListView extends React.Component {
 
@@ -84,7 +84,7 @@ class ListView extends React.Component {
                     }}
                 >
                     <div className="dialogContent">
-                        <FieldViewFields entity={this.state.selectedItem} />
+                        <Details entity={this.state.selectedItem} />
                     </div>
                 </Dialog>
 

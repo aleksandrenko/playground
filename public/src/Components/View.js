@@ -1,9 +1,9 @@
 import React from 'react';
 
-import getListViewGrid from './ListViewGrid';
-import FiltersToUrlParams from './FiltersToUrlParams';
+import getListViewGrid from './ListView/index';
+import FiltersToUrlParams from './Shared/FiltersToUrlParams';
 import getSearchParamsFromUrl from "../utils/getSearchParamsFromUrl";
-import getFieldView from "./FieldView";
+import getFieldView from "./SingleItemView/index";
 
 class View extends React.Component {
     constructor(props) {

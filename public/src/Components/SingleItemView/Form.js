@@ -1,8 +1,8 @@
 import React from 'react';
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-import FieldFormFields from "./FieldFormFields";
-import FieldViewFields from './FieldViewFields';
+import FormFields from "./FormFields";
+import Details from './Details';
 
 const getMutationArgs = (_args) => {
     const args = _args.map(arg => {
@@ -69,13 +69,13 @@ export default (type) => {
                                 }}
                             >
 
-                                <FieldFormFields
+                                <FormFields
                                     type={type}
                                     formData={formData}
                                 />
 
                                 <div>
-                                    <FieldViewFields entity={data} />
+                                    <Details entity={data} />
                                 </div>
                             </form>
                         </div>

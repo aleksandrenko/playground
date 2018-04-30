@@ -29,7 +29,7 @@ const getTypeAndDataFromEntity = (entity) => {
     }
 };
 
-class FieldViewFields extends React.Component {
+class Details extends React.Component {
 
     render() {
         const entity = this.props.entity;
@@ -56,4 +56,4 @@ class FieldViewFields extends React.Component {
     }
 }
 
-export default FieldViewFields;
+export default Details;

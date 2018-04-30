@@ -2,8 +2,8 @@ import React from 'react';
 
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import getSearchParamsFromUrl from '../utils/getSearchParamsFromUrl';
-import setHistoryURL from '../utils/setHistoryUrlSearchValues'
+import getSearchParamsFromUrl from '../../utils/getSearchParamsFromUrl';
+import setHistoryURL from '../../utils/setHistoryUrlSearchValues'
 
 class FiltersToUrlParams extends React.Component {
     constructor(props) {

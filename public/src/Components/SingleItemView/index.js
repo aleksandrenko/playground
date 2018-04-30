@@ -3,12 +3,12 @@ import {graphql} from "react-apollo/index";
 
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
-import FieldViewFields from './FieldViewFields';
+import Details from './Details';
 
-import Spinner from './Spinner';
-import getQueryQL from '../utils/generateQL';
+import Spinner from '../Shared/Spinner';
+import getQueryQL from '../../utils/generateQL';
 
-class FieldView extends React.Component {
+class Index extends React.Component {
 
     render() {
         const type = this.props.type;
@@ -24,7 +24,7 @@ class FieldView extends React.Component {
                 { error && <div style={{ color: 'red' }}>{ error.message }</div> }
 
                 { !error &&
-                    <FieldViewFields
+                    <Details
                         data={data}
                         type={type}
                     />
@@ -49,5 +49,5 @@ export default (type) => {
             }
         }
     }
-    )(FieldView);
+    )(Index);
 };
