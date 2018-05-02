@@ -77,6 +77,10 @@ class FormFields extends React.Component {
         return elements;
     };
 
+    onSubmit = () => {
+      this.props.onSubmit(this.state.formData);
+    };
+
 
     render() {
         const { type } = this.props;
@@ -91,7 +95,7 @@ class FormFields extends React.Component {
                 { uiFields }
 
                 <DefaultButton
-                    type="submit"
+                    onClick={this.onSubmit}
                     primary={ true }
                     disabled={ isFormInValid }
                 >

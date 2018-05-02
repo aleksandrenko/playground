@@ -62,22 +62,15 @@ export default (type) => {
                 <Mutation mutation={MUTATION_QL}>
                     {(createProduct, { data }) => (
                         <div>
-                            <form
-                                onSubmit={e => {
-                                    e.preventDefault();
-                                    createProduct({ variables: formData });
-                                }}
-                            >
+                            <FormFields
+                                type={type}
+                                formData={formData}
+                                onSubmit={ (formData) => createProduct({ variables: formData }) }
+                            />
 
-                                <FormFields
-                                    type={type}
-                                    formData={formData}
-                                />
-
-                                <div>
-                                    <Details entity={data} />
-                                </div>
-                            </form>
+                            <div>
+                                <Details entity={data} />
+                            </div>
                         </div>
                     )}
                 </Mutation>
