@@ -1,0 +1,84 @@
+import * as React from 'react';
+
+import {TextField} from 'office-ui-fabric-react/lib/TextField';
+
+import {Dropdown, DropdownMenuItemType} from 'office-ui-fabric-react/lib/Dropdown';
+import {Toggle} from 'office-ui-fabric-react/lib/Toggle';
+
+import antValidation from "antvalidation";
+
+class InputComponent extends React.Component {
+
+    getErrorMessage = (field, value) => {
+        value = value + ''; //only strings can be validated
+
+        const ants = field.description || '';
+        const errors = antValidation({ants, value});
+
+        return errors.join('\n');
+    };
+
+    render() {
+        const {field, fieldConfig, onChanged, value, serverSchema} = this.props;
+
+        const inputType = field.type;
+
+        const isString = inputType === 'String';
+        const isBoolean = inputType === 'Boolean';
+
+        const enums = serverSchema.enums;
+        const usedEnum = enums.filter(_enum => Object.keys(_enum)[0] === inputType)[0];
+        const isUIDropDown = !!usedEnum;
+        const enumValues = Object.values(usedEnum || {})[0];
+        const dropDownOptions = enumValues && enumValues.map(val => ({
+            key: val,
+            text: val
+        }));
+
+        return (
+            <span className="value">
+                {
+                    isUIDropDown &&
+                    <Dropdown
+                placeHolder={`Select an ${field.name}.`}
+                options={dropDownOptions}
+                value={value}
+                onChanged={(value) => {
+                    onChanged(value.key, field)
+                }}
+            />
+                }
+
+                {
+                    isBoolean &&
+                    <Toggle
+                        defaultChecked={false}
+                        onText='Yes'
+                        offText='No'
+                        value={value}
+                        onChanged={(value) => {
+                            onChanged(value, field)
+                        }}
+                    />
+                }
+
+                {
+                    isString &&
+                    <TextField
+                        placeholder="Please fill"
+                        description={field.description}
+                        value={value}
+                        onGetErrorMessage={(value) => this.getErrorMessage(field, value)}
+                        deferredValidationTime={200}
+                        disabled={fieldConfig.nouserinput}
+                        onChanged={(value) => {
+                            onChanged(value, field)
+                        }}
+                    />
+                }
+            </span>
+        );
+    }
+}
+
+export default InputComponent;
