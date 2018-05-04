@@ -19,6 +19,10 @@ const typeDefs = `
         # @email
         email: String, 
         
+        color: AllowedColor 
+        
+        inStock: Boolean
+        
         # A short description @min(10) @max(255)
         description: String
     ): Product

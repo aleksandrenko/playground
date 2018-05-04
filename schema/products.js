@@ -42,6 +42,12 @@
 */
 
 export const ProductType = `
+    enum AllowedColor {
+      RED
+      GREEN
+      BLUE
+    }
+
     type Product {
         id: Int!
         name: String!
@@ -50,6 +56,7 @@ export const ProductType = `
         description: String
         img: String
         creatingDate: String
+        color: AllowedColor 
         ingredients: [Ingredient]
     }
     

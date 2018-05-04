@@ -5,12 +5,8 @@ import antValidation from "antvalidation";
 
 // https://www.apollographql.com/docs/react/essentials/mutations.html
 
-// import Spinner from './Spinner';
-// import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-// import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-// import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-// import { Slider } from 'office-ui-fabric-react/lib/Slider';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -54,6 +50,10 @@ class FormFields extends React.Component {
         const elements = _args.map(field => {
             const fieldConfig = getFieldConfig(field);
             const inputType = field.type;
+
+            const isString = inputType === 'String';
+            const isBoolean = inputType === 'Boolean';
+
             const enums = this.props.serverSchema.enums;
             const usedEnum = enums.filter(_enum => Object.keys(_enum)[0] === inputType)[0];
             const isUIDropDown = !!usedEnum;
@@ -78,11 +78,22 @@ class FormFields extends React.Component {
                         <Dropdown
                             placeHolder={`Select an ${field.name}.`}
                             options={dropDownOptions}
+                            value={value}
+                            onChanged={ (value) => { this.onChanged(value.key, field) } }
+                        />
+                    }
+
+                    { isBoolean &&
+                        <Toggle
+                            defaultChecked={ false }
+                            onText='Yes'
+                            offText='No'
+                            value={value}
                             onChanged={ (value) => { this.onChanged(value, field) } }
                         />
                     }
 
-                    { !isUIDropDown &&
+                    { isString &&
                         <TextField
                             placeholder="Please fill"
                             description={field.description}
@@ -114,8 +125,6 @@ class FormFields extends React.Component {
         const isFormInValid = !!Object.values(this.state.errors)
             .filter(fieldErrors => fieldErrors.length)
             .length;
-
-        console.log(this.props);
 
         return (
             <div className="field">
