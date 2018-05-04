@@ -9,8 +9,8 @@ import antValidation from "antvalidation";
 // import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 // import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 // import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-// import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 // import { Slider } from 'office-ui-fabric-react/lib/Slider';
+import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -40,9 +40,28 @@ class FormFields extends React.Component {
         return errors.join('\n');
     };
 
+    onChanged = (value, field) => {
+        const formData = Object.assign({}, this.state.formData);
+
+        formData[field.name] = value;
+
+        this.setState({
+            formData
+        });
+    };
+
     getFieldsFromArguments = (_args, formData) => {
         const elements = _args.map(field => {
             const fieldConfig = getFieldConfig(field);
+            const inputType = field.type;
+            const enums = this.props.serverSchema.enums;
+            const usedEnum = enums.filter(_enum => Object.keys(_enum)[0] === inputType)[0];
+            const isUIDropDown = !!usedEnum;
+            const enumValues = Object.values(usedEnum || {})[0];
+            const dropDownOptions = enumValues && enumValues.map(val => ({
+                key: val,
+                text: val
+            }));
 
             const value = formData[field.name] !== undefined
                 ? formData[field.name]
@@ -54,21 +73,27 @@ class FormFields extends React.Component {
                 <div className="row" key={`field_${field.name}`}>
                     <label className="label">{field.name}: </label>
                     <span className="value">
-                    <TextField
-                        placeholder="Please fill"
-                        description={field.description}
-                        value={value}
-                        onGetErrorMessage={ (value) => this.getErrorMessage(field, value) }
-                        deferredValidationTime={200}
-                        disabled={fieldConfig.nouserinput}
-                        onChanged={ (value) => {
-                            const formData = Object.assign({}, this.state.formData);
-                            formData[field.name] = value;
-                            this.setState({
-                                formData
-                            });
-                        } }
-                    />
+
+                    { isUIDropDown &&
+                        <Dropdown
+                            placeHolder={`Select an ${field.name}.`}
+                            options={dropDownOptions}
+                            onChanged={ (value) => { this.onChanged(value, field) } }
+                        />
+                    }
+
+                    { !isUIDropDown &&
+                        <TextField
+                            placeholder="Please fill"
+                            description={field.description}
+                            value={value}
+                            onGetErrorMessage={(value) => this.getErrorMessage(field, value)}
+                            deferredValidationTime={200}
+                            disabled={fieldConfig.nouserinput}
+                            onChanged={ (value) => { this.onChanged(value, field) } }
+                        />
+                    }
+
                 </span>
                 </div>
             )
@@ -89,6 +114,8 @@ class FormFields extends React.Component {
         const isFormInValid = !!Object.values(this.state.errors)
             .filter(fieldErrors => fieldErrors.length)
             .length;
+
+        console.log(this.props);
 
         return (
             <div className="field">

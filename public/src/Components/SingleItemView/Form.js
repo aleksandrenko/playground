@@ -40,7 +40,7 @@ const getResultValueNames = (_returnValue) => {
 const formData = {};
 
 
-export default (type) => {
+export default (type, serverSchema) => {
     const args = getMutationArgs(type.arguments);
     const fragArgs = getMutationFragmentArgs(type.arguments);
     const returnValueNames = getResultValueNames(type.returnType);
@@ -65,6 +65,7 @@ export default (type) => {
                             <FormFields
                                 type={type}
                                 formData={formData}
+                                serverSchema={serverSchema}
                                 onSubmit={ (formData) => createProduct({ variables: formData }) }
                             />
 

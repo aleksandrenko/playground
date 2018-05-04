@@ -106,7 +106,7 @@ class App extends React.Component {
                             serverSchema.mutationTypes &&
                             serverSchema.mutationTypes.map(entry => {
                                 const url = `/${entry.name}`;
-                                const View = getFieldForm(entry);
+                                const View = getFieldForm(entry, serverSchema);
                                 return <Route key={url} exact path={url} component={View} />
                             })
                         }

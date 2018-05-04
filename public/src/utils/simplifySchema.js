@@ -42,8 +42,9 @@ export default (fields) => {
     const enums =  Object.values(fields._typeMap)
         .filter(isEnum)
         .filter(_enum => _enum.astNode)
-        .map(_enum => _enum.astNode.values
-            .map(val => val.name.value));
+        .map(_enum => ({
+            [_enum.name]: (_enum.astNode.values.map(val => val.name.value))
+        }));
 
     /**
      * Simplifying schema types
