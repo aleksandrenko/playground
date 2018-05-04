@@ -22,6 +22,7 @@ const getSimplifyField = (_field) => ({
 });
 
 const isList = (queryType) => queryType.type.constructor.name === 'GraphQLList';
+const isEnum = (queryType) => queryType.constructor.name === 'GraphQLEnumType';
 
 
 const getTypeDefinitionFromGraphQLTypes = (types, typeToFind) => types
@@ -38,6 +39,12 @@ export default (fields) => {
 
     console.log('GraphQL Schema', fields);
 
+    const enums =  Object.values(fields._typeMap)
+        .filter(isEnum)
+        .filter(_enum => _enum.astNode)
+        .map(_enum => _enum.astNode.values
+            .map(val => val.name.value));
+
     /**
      * Simplifying schema types
      * @type {{name: *, description: *, fields: {name: *, type: *, isRequired: *, description: *}[]}[]}
@@ -45,12 +52,16 @@ export default (fields) => {
     const schemaTypes = Object.values(fields._typeMap)
         .filter(field => field.astNode !== undefined)
         .filter(field => field.name !== 'Query')
-        .map(schemaField => ({
-            name: schemaField.name,
-            description: schemaField.description,
-            fields: Object.values(schemaField._fields)
-                .map(getSimplifyField)
-        }));
+        .filter(field => !isEnum(field))
+        .map(schemaField => {
+
+            return {
+                name: schemaField.name,
+                description: schemaField.description,
+                fields: Object.values(schemaField._fields)
+                    .map(getSimplifyField)
+            }
+        });
 
     /**
      * Simplifying schema query types
@@ -79,12 +90,14 @@ export default (fields) => {
         );
 
     console.log('Simplified schema');
+    console.log('Enums:', enums);
     console.log('Query Types:', queryTypes);
     console.log('Mutation Types:', mutationTypes);
     console.log('Schema Types:', schemaTypes);
     console.log('');
 
     return {
+        enums,
         queryTypes,
         mutationTypes,
         schemaTypes
