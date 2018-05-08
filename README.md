@@ -10,9 +10,3 @@ place to test new tools
 6. The react dev server will ask to start on separate port like 3001. When you agree a browser will open.
 
 Keep in mind that this is POC the code and organization is messy.
-
-#TODO:
-- extract view component for entity form + validation
-- extract view for rendering arguments + validation
-- apollo paging
-- use different UI components depending on the field config
