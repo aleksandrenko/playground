@@ -98,7 +98,7 @@ class App extends React.Component {
                             serverSchema.queryTypes &&
                             serverSchema.queryTypes.map(entry => {
                                 const url = `/${entry.name}`;
-                                const View = getView(entry);
+                                const View = getView(entry, serverSchema);
                                 return <Route key={url} exact path={url} component={View} />
                             })
                         }

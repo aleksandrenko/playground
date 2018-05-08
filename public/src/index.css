@@ -75,6 +75,10 @@ body {
   flex: 1;
 }
 
+.withFilter .filters {
+  display: flex;
+}
+
 .withFilter .filters li {
   display: inline-block;
   padding-right: 10px;

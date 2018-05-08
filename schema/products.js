@@ -128,12 +128,18 @@ export const createProduct = (_, params) => {
     });
 };
 
-export const ProductsResolver = (_, { idLargerThen }) => {
+export const ProductsResolver = (_, { idLargerThen, isPublic }) => {
     console.log('idLargerThen', idLargerThen);
 
     if (idLargerThen === undefined) {
         return createdProducts;
     }
 
-    return createdProducts.filter(product => product.id > idLargerThen);
+    let filteredProducts = createdProducts.filter(product => product.id > idLargerThen);
+
+    if (isPublic !== undefined) {
+        filteredProducts = filteredProducts.filter(product => product.isPublic === isPublic);
+    }
+
+    return filteredProducts;
 };

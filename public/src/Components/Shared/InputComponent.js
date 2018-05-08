@@ -2,8 +2,9 @@ import * as React from 'react';
 
 import {TextField} from 'office-ui-fabric-react/lib/TextField';
 
-import {Dropdown, DropdownMenuItemType} from 'office-ui-fabric-react/lib/Dropdown';
+import {Dropdown} from 'office-ui-fabric-react/lib/Dropdown';
 import {Toggle} from 'office-ui-fabric-react/lib/Toggle';
+import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
 
 import antValidation from "antvalidation";
 
@@ -25,6 +26,9 @@ class InputComponent extends React.Component {
 
         const isString = inputType === 'String';
         const isBoolean = inputType === 'Boolean';
+        const isInt = inputType === 'Int';
+
+        console.log('inputType', inputType, value, typeof value);
 
         const enums = serverSchema.enums;
         const usedEnum = enums.filter(_enum => Object.keys(_enum)[0] === inputType)[0];
@@ -35,11 +39,9 @@ class InputComponent extends React.Component {
             text: val
         }));
 
-        return (
-            <span className="value">
-                {
-                    isUIDropDown &&
-                    <Dropdown
+        const inputComponent = (
+            isUIDropDown &&
+            <Dropdown
                 placeHolder={`Select an ${field.name}.`}
                 options={dropDownOptions}
                 value={value}
@@ -47,35 +49,57 @@ class InputComponent extends React.Component {
                     onChanged(value.key, field)
                 }}
             />
-                }
+            || isBoolean &&
+            <Toggle
+                defaultChecked={false}
+                onText='Yes'
+                offText='No'
+                checked={value}
+                onChanged={(value) => {
+                    onChanged(value, field)
+                }}
+            />
+            || isString &&
+            <TextField
+                placeholder="Please fill"
+                description={field.description}
+                value={value}
+                onGetErrorMessage={(value) => this.getErrorMessage(field, value)}
+                deferredValidationTime={200}
+                disabled={fieldConfig.nouserinput}
+                onChanged={(value) => {
+                    onChanged(value, field)
+                }}
+            />
+            || isInt &&
+            <TextField
+                placeholder="Please fill"
+                description={field.description}
+                value={value}
+                onGetErrorMessage={(value) => this.getErrorMessage(field, value)}
+                deferredValidationTime={200}
+                disabled={fieldConfig.nouserinput}
+                onChanged={(value) => {
+                    onChanged(value, field)
+                }}
+            />
+            ||
+            <TextField
+                placeholder="Please fill"
+                description={field.description}
+                value={value}
+                onGetErrorMessage={(value) => this.getErrorMessage(field, value)}
+                deferredValidationTime={200}
+                disabled={fieldConfig.nouserinput}
+                onChanged={(value) => {
+                    onChanged(value, field)
+                }}
+            />
+        );
 
-                {
-                    isBoolean &&
-                    <Toggle
-                        defaultChecked={false}
-                        onText='Yes'
-                        offText='No'
-                        value={value}
-                        onChanged={(value) => {
-                            onChanged(value, field)
-                        }}
-                    />
-                }
-
-                {
-                    isString &&
-                    <TextField
-                        placeholder="Please fill"
-                        description={field.description}
-                        value={value}
-                        onGetErrorMessage={(value) => this.getErrorMessage(field, value)}
-                        deferredValidationTime={200}
-                        disabled={fieldConfig.nouserinput}
-                        onChanged={(value) => {
-                            onChanged(value, field)
-                        }}
-                    />
-                }
+        return (
+            <span className="value">
+                { inputComponent }
             </span>
         );
     }

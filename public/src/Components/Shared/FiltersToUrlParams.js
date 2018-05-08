@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import InputComponent from '../Shared/InputComponent';
+
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import getSearchParamsFromUrl from '../../utils/getSearchParamsFromUrl';
 import setHistoryURL from '../../utils/setHistoryUrlSearchValues'
+import getFieldConfig from "../../utils/getFieldConfig";
 
 class FiltersToUrlParams extends React.Component {
     constructor(props) {
@@ -42,19 +44,22 @@ class FiltersToUrlParams extends React.Component {
         const uiElements = this.props.type.arguments
             .map((arg) => {
                 const inputValue = this.state.values[arg.name] || '';
+                const fieldConfig = getFieldConfig(arg);
+                const serverSchema = this.props.serverSchema;
 
                 return (
                     <li key={arg.name}>
                         <span>{arg.name}:</span>
 
-                        <TextField
+                        <InputComponent
+                            value={inputValue}
                             placeholder="Please fill"
                             description={arg.description}
                             onChanged={ (value) => this.onValueUIChange({ name: arg.name, value }) }
-                            value={inputValue}
+                            field={arg}
+                            fieldConfig={fieldConfig}
+                            serverSchema={serverSchema}
                         />
-
-                        <div><small>{ arg.description }</small></div>
                     </li>
                 );
             });

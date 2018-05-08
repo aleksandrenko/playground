@@ -40,9 +40,10 @@ class View extends React.Component {
     }
 }
 
-export default (type) => (props) => (
+export default (type, serverSchema) => (props) => (
     <View
         type={type}
+        serverSchema={serverSchema}
         { ...props }
     />
 );
