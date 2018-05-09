@@ -65,10 +65,8 @@ body {
 }
 
 .withFilter .header .filterWrapper {
-  background: #fafafa;
   margin-bottom: 10px;
   border: solid 1px #eee;
-  padding: 10px;
 }
 
 .withFilter .content {
@@ -77,17 +75,26 @@ body {
 
 .withFilter .filters {
   display: flex;
+  border-bottom: solid 1px #eee;
+  padding: 10px;
+  background: #fafafa;
 }
 
-.withFilter .filters li {
-  display: inline-block;
+.withFilter .filters > li {
+  display: flex;
   padding-right: 10px;
+  align-items: center;
 }
 
-.withFilter .filters li span {
+.withFilter .filters > li > label {
   text-transform: capitalize;
   display: inline-block;
   padding-right: 5px;
+  font-weight: 600;
+}
+
+.withFilter .actions {
+  padding: 10px;
 }
 
 .ms-Dialog-main {
@@ -102,6 +109,7 @@ body {
 
 .field .row {
   display: flex;
+  align-items: center;
   padding: 5px 0;
   border-bottom: solid 1px #eee;
 }
@@ -117,4 +125,73 @@ body {
 .field .row .value {
   flex: 1;
   line-height: 32px;
+}
+
+/* overwrite textField */
+
+.ms-TextField .ms-TextField-errorMessage {
+  background: #a80000;
+  color: #fff;
+  padding: 5px 8px;
+  position: absolute;
+  top: 33px;
+  line-height: 130%;
+  opacity: 0.8;
+  z-index: 100;
+}
+
+.ms-Toggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0 !important;
+}
+
+.ms-Toggle .ms-Toggle-innerContainer {
+  align-items: center;
+}
+
+.ms-Panel-content {
+  padding: 20px !important;
+}
+
+.config .ms-Button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 100;
+}
+
+.ms-Overlay {
+  cursor: default !important;
+}
+
+.schemaLoader {
+  position: absolute;
+  left: 16px;
+}
+
+.noSchemaWrapper {
+    padding: 5px 45px 5px 5px;
+}
+
+b, strong {
+  font-weight: 600 !important;
+}
+
+.fullPageSpinner {
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  display: flex;
+  background: rgba(255,255,255,0.5);
+}
+
+.fullPageSpinner .ms-Spinner-circle {
+  margin: 0 !important;
 }

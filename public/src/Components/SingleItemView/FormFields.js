@@ -7,7 +7,6 @@ import InputComponent from '../Shared/InputComponent';
 
 // https://www.apollographql.com/docs/react/essentials/mutations.html
 
-
 class FormFields extends React.Component {
     constructor(props) {
         super(props);

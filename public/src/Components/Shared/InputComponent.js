@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import {TextField} from 'office-ui-fabric-react/lib/TextField';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-import {Dropdown} from 'office-ui-fabric-react/lib/Dropdown';
-import {Toggle} from 'office-ui-fabric-react/lib/Toggle';
-import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import antValidation from "antvalidation";
 
@@ -58,6 +57,7 @@ class InputComponent extends React.Component {
                 onChanged={(value) => {
                     onChanged(value, field)
                 }}
+                disabled={fieldConfig.nouserinput}
             />
             || isString &&
             <TextField

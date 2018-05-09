@@ -49,7 +49,7 @@ class FiltersToUrlParams extends React.Component {
 
                 return (
                     <li key={arg.name}>
-                        <span>{arg.name}:</span>
+                        <label>{arg.name}:</label>
 
                         <InputComponent
                             value={inputValue}
@@ -70,13 +70,13 @@ class FiltersToUrlParams extends React.Component {
                         {uiElements}
                     </ul>
 
-                    <br/>
-
-                    <DefaultButton
-                        primary={true}
-                        text='Update'
-                        onClick={this.updateFilter}
-                    />
+                    <div className="actions">
+                        <DefaultButton
+                            primary={true}
+                            text='Update'
+                            onClick={this.updateFilter}
+                        />
+                    </div>
                 </div>
             : null
     }

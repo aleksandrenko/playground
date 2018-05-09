@@ -7,7 +7,7 @@ import {
 export default class SpinnerComponent extends React.Component {
     render() {
         return (
-           <Spinner size={ SpinnerSize.large } label={this.props.label} ariaLive='assertive' />
+           <Spinner size={ SpinnerSize.large } label={this.props.label} className={this.props.className} />
         );
     }
 }

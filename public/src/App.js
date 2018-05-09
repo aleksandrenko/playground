@@ -1,19 +1,11 @@
 import React from 'react';
 
-import { HttpLink } from 'apollo-link-http';
-import fetch from 'node-fetch';
-
-import simplifySchema from './utils/simplifySchema';
-import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools';
-
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 
 import Nav from './Components/Nav';
-import Spinner from './Components/Shared/Spinner';
+import Config from './Components/Config';
 
 import NoMatch from './Page/404';
-
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
 import {Switch, Route, withRouter} from 'react-router-dom';
 
@@ -21,6 +13,9 @@ import { initializeIcons } from '@uifabric/icons';
 
 import getView from "./Components/View";
 import getFieldForm from "./Components/SingleItemView/Form";
+import Spinner from './Components/Shared/Spinner';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+
 initializeIcons();
 
 class App extends React.Component {
@@ -29,93 +24,92 @@ class App extends React.Component {
         super(props);
         this.state = {
             schema: null,
-            isLoading: true,
-            error: null
+            schemaLoadingError: null,
+            schemaLoading: null
         };
     }
 
-    componentDidMount() {
-        const link = new HttpLink({ uri: 'http://localhost:3000/graphql/', fetch });
+    changeConfig = ({schema, error, isLoading}) => {
+        this.setState({
+            schema,
+            schemaLoadingError: error,
+            schemaLoading: isLoading
+        });
 
-        introspectSchema(link)
-            .then((schema) => {
-                const executableSchema = makeRemoteExecutableSchema({
-                    schema,
-                    link,
-                });
-
-                const simplifiedSchema = simplifySchema(executableSchema);
-
-                this.setState({
-                    schema: simplifiedSchema,
-                    isLoading: false
-                });
-
-                //Redirect to the first if any and no url
-                if (this.props.history.location.pathname.length <= 1) {
-                    const firstItemInMenuName = simplifiedSchema.queryTypes[0] && simplifiedSchema.queryTypes[0].name;
-                    const redirectedUrl = `/${firstItemInMenuName}`;
-                    this.props.history.push(redirectedUrl);
-                }
-            })
-            .catch((error) => {
-                this.setState({
-                    error,
-                    isLoading: false
-                });
-            });
-    }
+        //Redirect to the first if any and no url
+        if (this.props.history.location.pathname.length <= 1) {
+            const firstItemInMenuName = schema.queryTypes[0] && schema.queryTypes[0].name;
+            const redirectedUrl = `/${firstItemInMenuName}`;
+            this.props.history.push(redirectedUrl);
+        }
+    };
 
     render() {
-        const { error, schema } = this.state;
-        const serverSchema = schema
-            ? schema
-            : [];
+        const { schema, schemaLoading, schemaLoadingError } = this.state;
+        const { loading } = this.props;
 
         return (
             <Fabric className="app">
-                { error &&
-                <MessageBar
-                    messageBarType={ MessageBarType.error }
-                    isMultiline={ false }
-                    dismissButtonAriaLabel='Close'
-                >
-                    { error.message }
-                </MessageBar>
+                <Config onUpdate={ this.changeConfig } />
+
+                { !schema && !schemaLoading && !schemaLoadingError &&
+                    <div className="noSchemaWrapper">
+                        <MessageBar messageBarType={MessageBarType.info}>
+                            <strong>No schema</strong>
+                            <p>Did you enter a valid url for the graphQL endpoint?</p>
+                        </MessageBar>
+                    </div>
                 }
 
-                { (this.props.loading || this.state.isLoading) &&
-                    <Spinner label='Loading server graphql schema...' />
+                { schemaLoadingError &&
+                <div className="noSchemaWrapper">
+                    <MessageBar messageBarType={MessageBarType.error}>
+                        <strong>Schema loading error:</strong>
+                        <p>{ schemaLoadingError }</p>
+                        <br/>
+                        <p>Check the Config and the GraphQL end-point.</p>
+                    </MessageBar>
+                </div>
                 }
 
+                { schemaLoading &&
+                <Spinner className="fullPageSpinner" label="Loading Schema ..." />
+                }
+
+                {loading &&
+                <Spinner className="fullPageSpinner" label="Loading data ..."/>
+                }
+
+                { schema &&
                 <nav className="page-nav">
-                    <Nav schema={serverSchema} />
+                    <Nav schema={schema} />
                 </nav>
+                }
 
+                {schema &&
                 <content className="page-content">
                     <Switch>
                         {
-                            serverSchema.queryTypes &&
-                            serverSchema.queryTypes.map(entry => {
+                            schema.queryTypes &&
+                            schema.queryTypes.map(entry => {
                                 const url = `/${entry.name}`;
-                                const View = getView(entry, serverSchema);
-                                return <Route key={url} exact path={url} component={View} />
+                                const View = getView(entry, schema);
+                                return <Route key={url} exact path={url} component={View}/>
                             })
                         }
                         {
-                            serverSchema.mutationTypes &&
-                            serverSchema.mutationTypes.map(entry => {
+                            schema.mutationTypes &&
+                            schema.mutationTypes.map(entry => {
                                 const url = `/${entry.name}`;
-                                const View = getFieldForm(entry, serverSchema);
-                                return <Route key={url} exact path={url} component={View} />
+                                const View = getFieldForm(entry, schema);
+                                return <Route key={url} exact path={url} component={View}/>
                             })
                         }
-                        { !(this.props.loading || this.state.isLoading) &&
-                            <Route component={NoMatch} />
-                        }
+                        <Route component={NoMatch}/>
 
                     </Switch>
                 </content>
+                }
             </Fabric>
         );
     }
