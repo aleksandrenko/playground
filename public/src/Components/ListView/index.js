@@ -14,7 +14,6 @@ import {
     CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 
-import getSearchParamsFromUrl from "../../utils/getSearchParamsFromUrl";
 import getQueryQL from '../../utils/generateQL';
 
 class ListView extends React.Component {
@@ -50,7 +49,7 @@ class ListView extends React.Component {
         });
     };
 
-    _onColumnClick = (ev, column) => {
+    _onColumnClick = (ev) => {
         this.setState({
             hideDialog: false,
             selectedItem: {
@@ -64,14 +63,13 @@ class ListView extends React.Component {
         const { loading, error, refetch } = this.props.data;
         const data = this.props.data[type.name];
         const columns = this.createColumns(type);
-        const searchParams = getSearchParamsFromUrl(this.props.history);
 
         if (loading) {
             return <Spinner label='Loading ...' />
         }
 
         return (
-            <div className="withFilter">
+            <div className="list-content">
                 <Dialog
                     hidden={ this.state.hideDialog }
                     onDismiss={ this._closeDialog }
@@ -88,27 +86,25 @@ class ListView extends React.Component {
                     </div>
                 </Dialog>
 
-                <div className="content">
-                    { error &&
-                    <MessageBar
-                        messageBarType={ MessageBarType.error }
-                        isMultiline={ false }
-                        dismissButtonAriaLabel='Close'
-                    >
-                        { error.message }
-                    </MessageBar>
-                    }
+                { error &&
+                <MessageBar
+                    messageBarType={ MessageBarType.error }
+                    isMultiline={ false }
+                    dismissButtonAriaLabel='Close'
+                >
+                    { error.message }
+                </MessageBar>
+                }
 
-                    <DetailsList
-                        items={ data }
-                        columns={ columns }
-                        setKey='set'
-                        layoutMode={ DetailsListLayoutMode.justified }
-                        isHeaderVisible={ true }
-                        onItemInvoked={ this._onColumnClick}
-                        checkboxVisibility={CheckboxVisibility.hidden}
-                    />
-                </div>
+                <DetailsList
+                    items={ data }
+                    columns={ columns }
+                    setKey='set'
+                    layoutMode={ DetailsListLayoutMode.justified }
+                    isHeaderVisible={ true }
+                    onItemInvoked={ this._onColumnClick}
+                    checkboxVisibility={CheckboxVisibility.hidden}
+                />
 
                 <button onClick={() => refetch()}>Refresh</button>
             </div>

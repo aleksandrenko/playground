@@ -37,7 +37,7 @@ class App extends React.Component {
         });
 
         //Redirect to the first if any and no url
-        if (this.props.history.location.pathname.length <= 1) {
+        if (schema && this.props.history.location.pathname.length <= 1) {
             const firstItemInMenuName = schema.queryTypes[0] && schema.queryTypes[0].name;
             const redirectedUrl = `/${firstItemInMenuName}`;
             this.props.history.push(redirectedUrl);
@@ -53,12 +53,12 @@ class App extends React.Component {
                 <Config onUpdate={ this.changeConfig } />
 
                 { !schema && !schemaLoading && !schemaLoadingError &&
-                    <div className="noSchemaWrapper">
-                        <MessageBar messageBarType={MessageBarType.info}>
-                            <strong>No schema</strong>
-                            <p>Did you enter a valid url for the graphQL endpoint?</p>
-                        </MessageBar>
-                    </div>
+                <div className="noSchemaWrapper">
+                    <MessageBar messageBarType={MessageBarType.info}>
+                        <strong>No schema</strong>
+                        <p>Did you enter a valid url for the graphQL endpoint?</p>
+                    </MessageBar>
+                </div>
                 }
 
                 { schemaLoadingError &&
@@ -76,7 +76,7 @@ class App extends React.Component {
                 <Spinner className="fullPageSpinner" label="Loading Schema ..." />
                 }
 
-                {loading &&
+                { loading &&
                 <Spinner className="fullPageSpinner" label="Loading data ..."/>
                 }
 
@@ -86,7 +86,7 @@ class App extends React.Component {
                 </nav>
                 }
 
-                {schema &&
+                { schema &&
                 <content className="page-content">
                     <Switch>
                         {

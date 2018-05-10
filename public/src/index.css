@@ -44,6 +44,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
 }
 
 .page-nav {
@@ -53,6 +54,8 @@ body {
 .page-content {
   padding: 10px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .tabs li {
@@ -71,6 +74,7 @@ body {
 
 .withFilter .content {
   flex: 1;
+  overflow: auto;
 }
 
 .withFilter .filters {

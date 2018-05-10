@@ -87,7 +87,7 @@ export const ProductType = `
 const dummyData = () => {
     var data = [];
 
-    for(var i = 0; i<15; i++) {
+    for(var i = 0; i<90; i++) {
         data.push({
             id: i,
             name: Math.random()*10000,
