@@ -1,0 +1,205 @@
+nma-layout {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background: #fff;
+    z-index: 1100;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+}
+
+nma-layout nma-row {
+    flex: 1;
+    border-left: solid 1px #eee;
+}
+
+nma-layout nma-title {
+    display: block;
+    padding: 3px 5px;
+    background: #eee;
+    margin: 2px;
+    color: #999;
+    font-size: 90%;
+    text-transform: uppercase;
+}
+
+nma-layout nma-content {
+    padding: 15px;
+    display: block;
+}
+
+nma-layout,
+select {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+nma-line {
+    display: block;
+    padding: 0 4px;
+    line-height: 20px;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+}
+
+nma-line[data-selected="true"] {
+    opacity: 1;
+}
+
+nma-line input {
+    color: inherit;
+}
+
+nma-comment {
+    opacity: 0.7;
+}
+
+/*
+
+.cm-comment {
+    color: #999
+}
+
+.cm-punctuation {
+    color: #555
+}
+
+.cm-keyword {
+    color: #B11A04
+}
+
+.cm-def {
+    color: #D2054E
+}
+
+.cm-property {
+    color: #1F61A0
+}
+
+.cm-qualifier {
+    color: #1C92A9
+}
+
+.cm-attribute {
+    color: #8B2BB9
+}
+
+.cm-number {
+    color: #2882F9
+}
+
+.cm-string {
+    color: #D64292
+}
+
+.cm-builtin {
+    color: #D47509
+}
+
+.cm-string-2 {
+    color: #0B7FC7
+}
+
+.cm-variable {
+    color: #397D13
+}
+
+.cm-atom {
+    color: #CA9800
+}
+*/
+
+nma-group {
+    display: block;
+    padding-left: 20px;
+}
+
+nma-group nma-line {
+    cursor: pointer;
+}
+
+nma-group nma-line:hover {
+    background: #fafafa;
+}
+
+nma-comment {
+    color: #999;
+}
+
+nma-root {
+    color: #B11A04;
+}
+
+nma-property {
+    color: #1F61A0;
+}
+
+nma-attribute {
+    color: #8B2BB9;
+}
+
+nma-string {
+    color: #D64292;
+}
+
+nma-number {
+    color: #2882F9;
+}
+
+nma-boolean {
+    color: #D47509;
+}
+
+.input {
+    border: none;
+    width: auto;
+    white-space: nowrap;
+    padding: 2px 0 !important;
+}
+
+nma-ocb,
+nma-ccb,
+nma-ob,
+nma-cb,
+nma-colon {
+    display: inline-block;
+}
+
+nma-line[data-selected="true"] nma-check::before {
+    content: '☑';
+}
+
+nma-check::before {
+    content: '☐';
+    padding-right: 3px;
+    color: inherit;
+}
+
+nma-colon::before {
+    content: ':';
+}
+
+nma-comma::before {
+    content: ',';
+    padding-right: 5px;
+}
+
+nma-ob::before {
+    content: '(';
+}
+
+nma-cb::before {
+    content: ')';
+}
+
+nma-ocb::before {
+    content: '{';
+    padding-left: 5px;
+}
+
+nma-ccb::before {
+    content: '}';
+}

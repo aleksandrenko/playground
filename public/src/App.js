@@ -16,6 +16,8 @@ import getFieldForm from "./Components/SingleItemView/Form";
 import Spinner from './Components/Shared/Spinner';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 
+import QueryMaker from './Components/QueryMaker';
+
 initializeIcons();
 
 class App extends React.Component {
@@ -51,6 +53,8 @@ class App extends React.Component {
         return (
             <Fabric className="app">
                 <Config onUpdate={ this.changeConfig } />
+
+                <QueryMaker schema={schema} />
 
                 { !schema && !schemaLoading && !schemaLoadingError &&
                 <div className="noSchemaWrapper">
