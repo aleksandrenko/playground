@@ -1,10 +1,29 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import styles from './styles.css';
 
-import {Dropdown} from 'office-ui-fabric-react/lib/Dropdown';
+import {DefaultButton} from 'office-ui-fabric-react/lib/Button';
 
+const ROOT_TYPES = {
+  QUERY: 'Query',
+  MUTATION: 'Mutation'
+};
+
+const initialState = {
+    rootType: ROOT_TYPES.QUERY
+};
 
 class Query extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = initialState;
+    }
+
+    rootChange = (rootType) => {
+        this.setState({
+            rootType
+        });
+    };
 
     render() {
         console.log(this.props.schema);
@@ -15,19 +34,25 @@ class Query extends Component {
                     <nma-title>
                         choose properties to include
                     </nma-title>
+
+                    <npm-subhead>
+                        <DefaultButton
+                            onClick={this.rootChange.bind(this, ROOT_TYPES.QUERY)}
+                            primary={this.state.rootType === ROOT_TYPES.QUERY}>
+                            {ROOT_TYPES.QUERY}
+                        </DefaultButton>
+                        <DefaultButton
+                            onClick={this.rootChange.bind(this, ROOT_TYPES.MUTATION)}
+                            primary={this.state.rootType === ROOT_TYPES.MUTATION}>
+                            {ROOT_TYPES.MUTATION}
+                        </DefaultButton>
+                        <nma-hint>(choose the type of your request)</nma-hint>
+                    </npm-subhead>
+
                     <nma-content>
                         <nma-maker>
-                            <nma-line># Type queries into this side of the screen, and you will</nma-line>
-                            <nma-line># see intelligent typeaheads aware of the current GraphQL type schema,</nma-line>
-                            <nma-line># live syntax, and validation errors highlighted within the text.</nma-line>
-                            <nma-line>&nbsp;</nma-line>
-                            <nma-line>
-                                # We'll get you started with a simple query showing your username!
-                            </nma-line>
-                            <nma-line>&nbsp;</nma-line>
-
                             <nma-line data-selected="true">
-                                <nma-root>query</nma-root>
+                                <nma-root>{this.state.rootType}</nma-root>
                                 <nma-ocb/>
                             </nma-line>
 
@@ -125,7 +150,7 @@ class Query extends Component {
 
                 <nma-row>
                     <nma-title>
-                        Generated graphql request
+                        generated graphql request
                     </nma-title>
                     <nma-content>
                         code
@@ -137,7 +162,7 @@ class Query extends Component {
                         server responce
                     </nma-title>
                     <nma-content>
-                        server responce
+                        { JSON.stringify(this.props.schema) }
                     </nma-content>
                 </nma-row>
 

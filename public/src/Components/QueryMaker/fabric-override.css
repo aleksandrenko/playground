@@ -1,0 +1,11 @@
+nma-layout .ms-Button {
+    font-size: 12px;
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 21px;
+}
+
+nma-layout .ms-Button-label {
+    margin: 0;
+    font-weight: normal;
+}
