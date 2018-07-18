@@ -54,7 +54,7 @@ class App extends React.Component {
             <Fabric className="app">
                 <Config onUpdate={ this.changeConfig } />
 
-                <QueryMaker schema={schema} />
+                {/*<QueryMaker schema={schema} />*/}
 
                 { !schema && !schemaLoading && !schemaLoadingError &&
                 <div className="noSchemaWrapper">

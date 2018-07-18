@@ -75,8 +75,9 @@ class Config extends React.Component {
             })
             .catch((error) => {
                 console.log('Loading schema error', JSON.stringify(error), error.response, error.bodyText);
+
                 this.updateState({
-                    error: `Error ${error.response.status}: ${error.response.statusText}`
+                    error: error.response ? `Error ${error.response.status}: ${error.response.statusText}` : 'Unknown error'
                 });
             });
     };
